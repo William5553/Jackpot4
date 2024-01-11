@@ -1,15 +1,19 @@
+import screens.*;
+
 import javax.swing.*;
 import java.awt.*;
 
 public class ScreenManager {
 
-    public JPanel[] createScreens() {
+    public JPanel[] createScreens(JFrame frame) {
         // make 2 jframes
-        JPanel titleScreen = new JPanel();
-        JPanel gameScreen = new JPanel();
+        TitleScreen titleScreen = new TitleScreen();
+        GameScreen gameScreen = new GameScreen();
 
+        Dimension frameSize = frame.getSize();
+        titleScreen.init(frameSize);
+        gameScreen.init(frameSize);
 
-
-        return mainPanel;
+        return new JPanel[] {titleScreen, gameScreen};
     }
 }

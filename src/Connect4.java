@@ -9,15 +9,14 @@ public class Connect4 {
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.setLocationRelativeTo(null);
 
-
         frame.setVisible(true);
-        this.setSize(myFrame.getSize());
 
         ScreenManager screenManager = new ScreenManager();
-        JPanel mainPanel = screenManager.createScreens();
+        JPanel[] screens = screenManager.createScreens(frame);
 
-
-
+        for (JPanel screen : screens) {
+            frame.add(screen);
+        }
     }
 
     public static void main(String[] args) {
