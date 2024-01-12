@@ -13,7 +13,7 @@ public class ScreenManager {
         GameScreen gameScreen = new GameScreen();
 
         Dimension frameSize = frame.getSize();
-        titleScreen.init(frameSize);
+//        titleScreen.init(frameSize);
         gameScreen.init(frameSize);
 
         return new JPanel[] {titleScreen, gameScreen};

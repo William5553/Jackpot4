@@ -15,6 +15,7 @@ public class TitleScreen extends JPanel {
         Image multiplayer = AssetManager.getImage("multiplayer.png");
 
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
         g2d.drawImage(AssetManager.getImage("background.jpg"), 0, 0, null);
         g2d.drawImage(logo, (this.getSize().width / 2) - (logo.getWidth(null) / 2), 25, null);
         g2d.drawImage(singleplayer, (this.getSize().width / 2) - (singleplayer.getWidth(null) / 2), 600, null);

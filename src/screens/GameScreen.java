@@ -15,7 +15,7 @@ public class GameScreen extends JPanel {
     public void init(Dimension size) {
         this.setSize(size);
         this.setLayout(null);
-        this.setBackground(Color.BLUE);
+        this.setBackground(Color.MAGENTA);
         this.setVisible(true);
     }
 }
