@@ -16,16 +16,14 @@ public class GameScreen extends JPanel implements ActionListener {
     private static int boardPercentage = 80;
     private static int fallSpeed = 80;
 
-    private int[][] pieces = new int[6][6];
+    private int[][] pieces = new int[6][7];
     private GamePiece addingPiece;
     private Timer pieceDropped;
 
     public void init(Dimension size) {
         this.setSize(size);
-        this.setLayout(null);
 //        this.setBackground(Color.MAGENTA);
         this.setVisible(true);
-        setPreferredSize(size);
         setBounds(0, 0, size.width, size.height + 34);
         pieceDropped = new Timer(50, this);
         addMouseListener(new MouseAdapter() {
