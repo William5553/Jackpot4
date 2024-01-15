@@ -6,6 +6,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class ScreenManager {
+    JPanel[] screens = new JPanel[2];
 
     public JPanel[] createScreens(JFrame frame) {
         // make 2 jframes
@@ -16,6 +17,11 @@ public class ScreenManager {
         titleScreen.init(frameSize);
         gameScreen.init(frameSize);
 
-        return new JPanel[] {titleScreen, gameScreen};
+        screens = new JPanel[] {titleScreen, gameScreen};
+        return screens;
+    }
+
+    public void setVisibility(int screenIndex, boolean visible) {
+        screens[screenIndex].setVisible(visible);
     }
 }

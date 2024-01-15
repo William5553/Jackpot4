@@ -23,7 +23,7 @@ public class GameScreen extends JPanel implements ActionListener {
     public void init(Dimension size) {
         this.setSize(size);
 //        this.setBackground(Color.MAGENTA);
-        this.setVisible(true);
+        this.setVisible(false);
         setBounds(0, 0, size.width, size.height + 34);
         pieceDropped = new Timer(50, this);
         addMouseListener(new MouseAdapter() {
@@ -92,6 +92,11 @@ public class GameScreen extends JPanel implements ActionListener {
 
     public void addPiece(int column) {
         if (addingPiece == null) {
+            if (column < 0 || column >= pieces[0].length) {
+                getToolkit().beep();
+                return;
+            }
+
             if (pieces[0][column] == 0) {
                 addingPiece = new GamePiece(0, column, incr * column + pos, 0);
                 pieceDropped.start();
