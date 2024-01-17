@@ -20,24 +20,6 @@ public class GameScreen extends JPanel implements ActionListener {
     private GamePiece addingPiece;
     private Timer pieceDropped;
 
-    public GameScreen(Dimension size) {
-        System.out.println("Initializing game screen");
-        this.setSize(size);
-//        this.setBackground(Color.MAGENTA);
-        this.setVisible(false);
-        setBounds(0, 0, size.width, size.height + 34);
-        pieceDropped = new Timer(50, this);
-        addMouseListener(new MouseAdapter() {
-            public void mousePressed(MouseEvent e) {
-                int column = (e.getPoint().x - pos) / incr;
-                addPiece(column);
-            }
-        });
-        int randomNumberThatWorks = 20;
-        ovalSize = size.width / randomNumberThatWorks - offset * 2;
-        incr = size.width / randomNumberThatWorks;
-    }
-
     @Override
     public void paint(Graphics g) {
         super.paint(g);
@@ -118,5 +100,23 @@ public class GameScreen extends JPanel implements ActionListener {
             }
         }
         repaint();
+    }
+
+    public GameScreen(Dimension size) {
+        System.out.println("Initializing game screen");
+                this.setSize(size);
+        //        this.setBackground(Color.MAGENTA);
+        this.setVisible(false);
+        setBounds(0, 0, size.width, size.height + 34);
+        pieceDropped = new Timer(50, this);
+        addMouseListener(new MouseAdapter() {
+            public void mousePressed(MouseEvent e) {
+                int column = (e.getPoint().x - pos) / incr;
+                addPiece(column);
+            }
+        });
+        int randomNumberThatWorks = 20;
+        ovalSize = size.width / randomNumberThatWorks - offset * 2;
+        incr = size.width / randomNumberThatWorks;
     }
 }

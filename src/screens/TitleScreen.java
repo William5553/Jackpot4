@@ -22,9 +22,9 @@ public class TitleScreen extends JPanel {
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
         g2d.drawImage(AssetManager.getImage("background.png"), 0, 0, null);
-        g2d.drawImage(logo, (this.getSize().width / 2) - (logo.getWidth(null) / 2), 110, null);
-        g2d.drawImage(singleplayer, (this.getSize().width / 2) - (singleplayer.getWidth(null) / 2), 600, null);
-        g2d.drawImage(multiplayer, (this.getSize().width / 2) - (multiplayer.getWidth(null) / 2), 725, null);
+        g2d.drawImage(logo, (this.getSize().width / 2) - (logo.getWidth(null) / 2), (int) (this.getSize().height * .1), null);
+        g2d.drawImage(singleplayer, (this.getSize().width / 2) - (singleplayer.getWidth(null) / 2), (int) (this.getSize().height * .55), null);
+        g2d.drawImage(multiplayer, (this.getSize().width / 2) - (multiplayer.getWidth(null) / 2), (int) (this.getSize().height * .675), null);
 
 //        sButton.setLocation((this.getSize().width / 2) - (singleplayer.getWidth(null) / 2), 600);
 //        this.add(sButton);

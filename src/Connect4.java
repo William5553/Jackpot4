@@ -5,16 +5,18 @@ import java.awt.*;
 
 public class Connect4 {
     public void run() {
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        System.out.println("Screen size: " + screenSize);
         JFrame frame = new JFrame("Jackpot 4");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(new Dimension(500,500));
+        frame.setSize(screenSize);
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.setLocationRelativeTo(null);
 
         frame.setVisible(true);
 
-        ScreenManager screenManager = new ScreenManager();
-        JPanel[] screens = screenManager.createScreens(frame);
+        ScreenManager screenManager = new ScreenManager(screenSize);
+        JPanel[] screens = screenManager.createScreens();
 
         for (JPanel screen : screens) {
             frame.add(screen);
