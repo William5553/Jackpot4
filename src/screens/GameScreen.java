@@ -20,7 +20,8 @@ public class GameScreen extends JPanel implements ActionListener {
     private GamePiece addingPiece;
     private Timer pieceDropped;
 
-    public void init(Dimension size) {
+    public GameScreen(Dimension size) {
+        System.out.println("Initializing game screen");
         this.setSize(size);
 //        this.setBackground(Color.MAGENTA);
         this.setVisible(false);

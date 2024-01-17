@@ -9,13 +9,10 @@ public class ScreenManager {
     JPanel[] screens = new JPanel[2];
 
     public JPanel[] createScreens(JFrame frame) {
-        // make 2 jframes
-        TitleScreen titleScreen = new TitleScreen();
-        GameScreen gameScreen = new GameScreen();
-
         Dimension frameSize = frame.getSize();
-        titleScreen.init(frameSize);
-        gameScreen.init(frameSize);
+        // make 2 jframes
+        TitleScreen titleScreen = new TitleScreen(frameSize);
+        GameScreen gameScreen = new GameScreen(frameSize);
 
         screens = new JPanel[] {titleScreen, gameScreen};
         return screens;
