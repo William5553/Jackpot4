@@ -52,7 +52,7 @@ public class GameScreen extends JPanel implements ActionListener {
         for (int row = 0; row < pieces.length; row++) {
             for (int column = 0; column < pieces[0].length; column++) {
                 if (pieces[row][column] == 1)
-                    gbi.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, .1f));
+                    gbi.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
                 else
                     gbi.setComposite(AlphaComposite.getInstance(AlphaComposite.CLEAR, 0.5f));
                 gbi.fillOval(incr * column + pos, incr * row + pos, ovalSize, ovalSize);
