@@ -18,9 +18,12 @@ public class GameScreen extends JPanel implements ActionListener {
     private static int incr;// = size / 4;
     private static final int fallSpeed = 80;
 
+    // first number is rows, second is columns
     private final int[][] pieces = new int[6][7];
     private GamePiece addingPiece;
     private final Timer pieceDropped;
+
+    private Color currentPieceColor = Color.RED;
 
     @Override
     public void paintComponent(Graphics g) {
@@ -28,7 +31,6 @@ public class GameScreen extends JPanel implements ActionListener {
 
         Graphics2D g2d = (Graphics2D) g;
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        Composite comp = g2d.getComposite();
 
         Dimension d = getSize();
         int w = d.width;
@@ -36,18 +38,17 @@ public class GameScreen extends JPanel implements ActionListener {
 
         BufferedImage buffImg = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
         Graphics2D gbi = buffImg.createGraphics();
-        //
-        //        // Clear area
+
+        // Clear area
         //        g2d.setColor(Color.WHITE);
         //        g2d.fillRect(0, 0, w, h);
 
         // Draw screen
-        //          gbi.setColor( Color.YELLOW );
-        gbi.setColor(Color.BLUE);
+        gbi.setColor(Color.BLUE); // colour of the board
         gbi.fillRect(0, 0, w, h);
 
         // Draw pieces or holes
-        gbi.setColor(Color.GREEN);
+        gbi.setColor(currentPieceColor);
         for (int row = 0; row < pieces.length; row++) {
             for (int column = 0; column < pieces[0].length; column++) {
                 if (pieces[row][column] == 1)
@@ -66,8 +67,6 @@ public class GameScreen extends JPanel implements ActionListener {
 
         // Draws the buffered image.
         g2d.drawImage(buffImg, null, 0, 0);
-
-        //          g2d.setComposite( comp );
     }
 
     public void addPiece(int column) {
@@ -102,8 +101,7 @@ public class GameScreen extends JPanel implements ActionListener {
     public GameScreen(Dimension size) {
         System.out.println("Initializing game screen");
         this.setSize(size);
-        //        this.setBackground(Color.MAGENTA);
-        this.setVisible(true);
+        this.setVisible(false);
         setBounds(0, 0, size.width, size.height + 34);
         pieceDropped = new Timer(50, this);
         addMouseListener(new MouseAdapter() {
@@ -112,8 +110,8 @@ public class GameScreen extends JPanel implements ActionListener {
                 addPiece(column);
             }
         });
-        int randomNumberThatWorks = 20;
-        ovalSize = size.width / randomNumberThatWorks - offset * 2;
-        incr = size.width / randomNumberThatWorks;
+        int randomNumberThatWorks = 15;
+        ovalSize = size.width / randomNumberThatWorks - offset * 2; // size of holes
+        incr = size.width / randomNumberThatWorks; // distance between holes
     }
 }
