@@ -1,63 +1,63 @@
 package screens;
 
 import util.AssetManager;
+import util.ScreenManager;
+
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 
 public class TitleScreen extends JPanel {
-//    JButton sButton, mButton;
+    // represented as a percentage of the screen height
+    private static final double DISTANCE_BETWEEN_BUTTONS = 0.05;
+    private static final double BUTTON_HEIGHT = 0.65;
+    private static final String[] btnImgs = {"singleplayer.png", "multiplayer.png"};
+    private static final ArrayList<JButton> buttons = new ArrayList<JButton>();
+    JButton sButton, mButton;
 
     @Override
-    public void paint(Graphics g) {
-        System.out.println("Painting title screen");
-        super.paint(g);
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g;
-
-        Image logo = AssetManager.getImage("logo.png");
-        Image singleplayer = AssetManager.getImage("singleplayer.png");
-        Image multiplayer = AssetManager.getImage("multiplayer.png");
-
-//        sButton.setIcon(AssetManager.getImageIcon("singleplayer.png"));
-//        mButton.setIcon(AssetManager.getImageIcon("multiplayer.png"));
 
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
+        Image logo = AssetManager.getImage("logo.png");
+
         g2d.drawImage(AssetManager.getImage("background.png"), 0, 0, null);
         g2d.drawImage(logo, (this.getSize().width / 2) - (logo.getWidth(null) / 2), (int) (this.getSize().height * .1), null);
-//        g2d.drawImage(singleplayer, (this.getSize().width / 2) - (singleplayer.getWidth(null) / 2), (int) (this.getSize().height * .55), null);
-//        g2d.drawImage(multiplayer, (this.getSize().width / 2) - (multiplayer.getWidth(null) / 2), (int) (this.getSize().height * .675), null);
-
-//        sButton.setLocation((this.getSize().width / 2) - (singleplayer.getWidth(null) / 2), 600);
-//        this.add(sButton);
     }
 
     public TitleScreen(Dimension size) {
         System.out.println("Initializing title screen");
         this.setSize(size);
-        this.setLayout(null);
+        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         this.setBackground(Color.RED);
         this.setVisible(true);
 
-//        System.out.println("here");
+        Dimension gap = new Dimension(0, (int) (size.height * BUTTON_HEIGHT));
+        this.add(new Box.Filler(gap, gap, gap));
 
-//        JButton sButton = new JButton("singleplayer", AssetManager.getImageIcon("singleplayer.png"));
-//        JButton mButton = new JButton("multiplayer", AssetManager.getImageIcon("multiplayer.png"));
+        for (String button : btnImgs) {
+            JButton newButton = new JButton("", AssetManager.getImageIcon(button));
+            newButton.setBorderPainted(false);
+            newButton.setContentAreaFilled(false);
+            newButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+            newButton.setAlignmentY(Component.BOTTOM_ALIGNMENT);
+            this.add(newButton);
+            this.add(Box.createRigidArea(new Dimension(0, (int) (size.height * DISTANCE_BETWEEN_BUTTONS))));
+            buttons.add(newButton);
+        }
 
-//        sButton.setBounds((this.getSize().width / 2) - (AssetManager.getImage("singleplayer.png").getWidth(null) / 2), 600, AssetManager.getImage("singleplayer.png").getWidth(null), AssetManager.getImage("singleplayer.png").getHeight(null));
-//        mButton.setBounds((this.getSize().width / 2) - (AssetManager.getImage("multiplayer.png").getWidth(null) / 2), 725, AssetManager.getImage("multiplayer.png").getWidth(null), AssetManager.getImage("multiplayer.png").getHeight(null));
-//        System.out.println("h2ere");
+        buttons.get(0).addActionListener(e -> {
+            ScreenManager.setVisibility(0, false);
+            ScreenManager.setVisibility(1, true);
+                });
 
-
-//        sButton.setLocation((this.getSize().width / 2) - (sButton.getWidth() / 2), 600);
-//        sButton.setLocation((this.getSize().width / 2) - (AssetManager.getImage("singleplayer.png").getWidth(null) / 2), 600);
-//        mButton.setLocation((this.getSize().width / 2) - (AssetManager.getImage("multiplayer.png").getWidth(null) / 2), 725);
-//        System.out.println("he3re");
-
-//        add(sButton);
-//        add(mButton);
-//        System.out.println("he4re");
+        buttons.get(1).addActionListener(e -> {
+            ScreenManager.setVisibility(0, false);
+            ScreenManager.setVisibility(1, true);
+                });
 
         repaint();
     }

@@ -13,7 +13,6 @@ public class GameScreen extends JPanel implements ActionListener {
     private static int ovalSize;// = size / 4 - offset * 2;
     private static int pos = offset / 2;
     private static int incr;// = size / 4;
-    private static int boardPercentage = 80;
     private static int fallSpeed = 80;
 
     private int[][] pieces = new int[6][7];
@@ -21,8 +20,8 @@ public class GameScreen extends JPanel implements ActionListener {
     private Timer pieceDropped;
 
     @Override
-    public void paint(Graphics g) {
-        super.paint(g);
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
 
         Graphics2D g2d = (Graphics2D) g;
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -42,12 +41,7 @@ public class GameScreen extends JPanel implements ActionListener {
         // Draw screen
         //          gbi.setColor( Color.YELLOW );
         gbi.setColor(Color.BLUE);
-        gbi.fillRect(
-                w * (boardPercentage / 100),
-                h * (boardPercentage / 100),
-                w - (w * ((100 - boardPercentage) / 100)),
-                h - (h * ((100 - boardPercentage) / 100))
-        );
+        gbi.fillRect(0, 0, w, h);
 
         // Draw pieces or holes
         gbi.setColor(Color.GREEN);
@@ -106,7 +100,7 @@ public class GameScreen extends JPanel implements ActionListener {
         System.out.println("Initializing game screen");
                 this.setSize(size);
         //        this.setBackground(Color.MAGENTA);
-        this.setVisible(false);
+        this.setVisible(true);
         setBounds(0, 0, size.width, size.height + 34);
         pieceDropped = new Timer(50, this);
         addMouseListener(new MouseAdapter() {

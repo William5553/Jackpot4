@@ -2,6 +2,7 @@ import util.ScreenManager;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 
 public class Connect4 {
     public void run() {
@@ -16,7 +17,7 @@ public class Connect4 {
         frame.setVisible(true);
 
         ScreenManager screenManager = new ScreenManager(screenSize);
-        JPanel[] screens = screenManager.createScreens();
+        ArrayList<JPanel> screens = screenManager.createScreens();
 
         for (JPanel screen : screens) {
             frame.add(screen);

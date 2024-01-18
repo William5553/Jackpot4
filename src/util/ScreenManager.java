@@ -4,22 +4,26 @@ import screens.*;
 
 import javax.swing.*;
 import java.awt.*;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 
 public class ScreenManager {
     Dimension screenSize;
-    JPanel[] screens = new JPanel[2];
+    private static ArrayList<JPanel> screens = new ArrayList<JPanel>();
 
-    public JPanel[] createScreens() {
+    public ArrayList<JPanel> createScreens() {
         // make 2 jframes
         TitleScreen titleScreen = new TitleScreen(screenSize);
         GameScreen gameScreen = new GameScreen(screenSize);
 
-        screens = new JPanel[] {titleScreen, gameScreen};
+        screens.add(titleScreen);
+        screens.add(gameScreen);
+
         return screens;
     }
 
-    public void setVisibility(int screenIndex, boolean visible) {
-        screens[screenIndex].setVisible(visible);
+    public static void setVisibility(int screenIndex, boolean visible) {
+        screens.get(screenIndex).setVisible(visible);
     }
 
     public ScreenManager(Dimension screenSize) {
