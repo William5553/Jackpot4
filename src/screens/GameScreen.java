@@ -44,7 +44,7 @@ public class GameScreen extends JPanel implements ActionListener {
         //        g2d.fillRect(0, 0, w, h);
 
         // Draw screen
-        gbi.setColor(Color.BLUE); // colour of the board
+        gbi.setColor(Color.decode("#dcb639")); // colour of the board
         gbi.fillRect(0, 0, w, h);
 
         // Draw pieces or holes
