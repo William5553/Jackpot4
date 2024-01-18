@@ -33,7 +33,6 @@ public class TitleScreen extends JPanel {
         this.setSize(size);
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         this.setBackground(Color.RED);
-        this.setVisible(true);
 
         Dimension gap = new Dimension(0, (int) (size.height * BUTTON_HEIGHT));
         this.add(new Box.Filler(gap, gap, gap));
@@ -59,6 +58,6 @@ public class TitleScreen extends JPanel {
             ScreenManager.setVisibility(1, true);
         });
 
-        repaint();
+        this.setVisible(true);
     }
 }
