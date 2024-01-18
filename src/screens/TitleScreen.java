@@ -9,8 +9,8 @@ import java.util.ArrayList;
 
 public class TitleScreen extends JPanel {
     // represented as a percentage of the screen height
-    private static final double DISTANCE_BETWEEN_BUTTONS = 0.05;
-    private static final double BUTTON_HEIGHT = 0.65;
+    private static final double DISTANCE_BETWEEN_BUTTONS = 0.075;
+    private static final double BUTTON_HEIGHT = 0.5;
     private static final String[] btnImgs = {"singleplayer.png", "multiplayer.png"};
     private static final ArrayList<JButton> buttons = new ArrayList<>();
 

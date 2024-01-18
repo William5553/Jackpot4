@@ -51,9 +51,9 @@ public class GameScreen extends JPanel implements ActionListener {
         gbi.setColor(currentPieceColor);
         for (int row = 0; row < pieces.length; row++) {
             for (int column = 0; column < pieces[0].length; column++) {
-                if (pieces[row][column] == 1)
+                if (pieces[row][column] == 1) // if there is a piece there
                     gbi.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
-                else
+                else // no piece there
                     gbi.setComposite(AlphaComposite.getInstance(AlphaComposite.CLEAR, 0.5f));
                 gbi.fillOval(incr * column + pos, incr * row + pos, ovalSize, ovalSize);
             }

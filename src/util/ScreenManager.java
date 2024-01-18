@@ -9,10 +9,10 @@ import java.util.ArrayList;
 
 public class ScreenManager {
     Dimension screenSize;
-    private static final ArrayList<JPanel> screens = new ArrayList<JPanel>();
+    private static final ArrayList<JPanel> screens = new ArrayList<>();
 
     public ArrayList<JPanel> createScreens() {
-        // make 2 jframes
+        // make 2 jpanels, one for the title screen and one for the game screen
         TitleScreen titleScreen = new TitleScreen(screenSize);
         GameScreen gameScreen = new GameScreen(screenSize);
 
