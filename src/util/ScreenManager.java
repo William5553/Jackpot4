@@ -1,15 +1,15 @@
 package util;
 
-import screens.*;
+import screens.GameScreen;
+import screens.TitleScreen;
 
 import javax.swing.*;
 import java.awt.*;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class ScreenManager {
     Dimension screenSize;
-    private static ArrayList<JPanel> screens = new ArrayList<JPanel>();
+    private static final ArrayList<JPanel> screens = new ArrayList<JPanel>();
 
     public ArrayList<JPanel> createScreens() {
         // make 2 jframes

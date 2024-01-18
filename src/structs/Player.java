@@ -1,8 +1,8 @@
 package structs;
 
 public class Player {
-    private String name;
-    private int playerNumber;
+    private final String name;
+    private final int playerNumber;
 
     public Player(String name, int playerNumber) {
         this.name = name;

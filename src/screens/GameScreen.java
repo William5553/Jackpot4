@@ -2,22 +2,25 @@ package screens;
 
 import structs.GamePiece;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.awt.image.BufferedImage;
 import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
 
 public class GameScreen extends JPanel implements ActionListener {
-//    private static int size = 400; // add 34 in the Y direction
-    private static int offset = 10;
+    //    private static int size = 400; // add 34 in the Y direction
+    private static final int offset = 10;
     private static int ovalSize;// = size / 4 - offset * 2;
-    private static int pos = offset / 2;
+    private static final int pos = offset / 2;
     private static int incr;// = size / 4;
-    private static int fallSpeed = 80;
+    private static final int fallSpeed = 80;
 
-    private int[][] pieces = new int[6][7];
+    private final int[][] pieces = new int[6][7];
     private GamePiece addingPiece;
-    private Timer pieceDropped;
+    private final Timer pieceDropped;
 
     @Override
     public void paintComponent(Graphics g) {
@@ -33,10 +36,10 @@ public class GameScreen extends JPanel implements ActionListener {
 
         BufferedImage buffImg = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
         Graphics2D gbi = buffImg.createGraphics();
-//
-//        // Clear area
-//        g2d.setColor(Color.WHITE);
-//        g2d.fillRect(0, 0, w, h);
+        //
+        //        // Clear area
+        //        g2d.setColor(Color.WHITE);
+        //        g2d.fillRect(0, 0, w, h);
 
         // Draw screen
         //          gbi.setColor( Color.YELLOW );
@@ -98,7 +101,7 @@ public class GameScreen extends JPanel implements ActionListener {
 
     public GameScreen(Dimension size) {
         System.out.println("Initializing game screen");
-                this.setSize(size);
+        this.setSize(size);
         //        this.setBackground(Color.MAGENTA);
         this.setVisible(true);
         setBounds(0, 0, size.width, size.height + 34);

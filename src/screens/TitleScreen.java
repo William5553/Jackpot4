@@ -52,12 +52,12 @@ public class TitleScreen extends JPanel {
         buttons.get(0).addActionListener(e -> {
             ScreenManager.setVisibility(0, false);
             ScreenManager.setVisibility(1, true);
-                });
+        });
 
         buttons.get(1).addActionListener(e -> {
             ScreenManager.setVisibility(0, false);
             ScreenManager.setVisibility(1, true);
-                });
+        });
 
         repaint();
     }
