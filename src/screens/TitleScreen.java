@@ -11,7 +11,7 @@ public class TitleScreen extends JPanel {
     // represented as a percentage of the screen height
     private static final double DISTANCE_BETWEEN_BUTTONS = 0.075;
     private static final double BUTTON_HEIGHT = 0.5;
-    private static final String[] btnImgs = {"singleplayer.png", "multiplayer.png"};
+    private static final String[] btnText = {"SINGLEPLAYER", "MULTIPLAYER"};
     private static final ArrayList<JButton> buttons = new ArrayList<>();
 
     @Override
@@ -36,12 +36,16 @@ public class TitleScreen extends JPanel {
         Dimension gap = new Dimension(0, (int) (size.height * BUTTON_HEIGHT));
         this.add(new Box.Filler(gap, gap, gap));
 
-        for (String button : btnImgs) {
-            JButton newButton = new JButton("", AssetManager.getImageIcon(button));
+        for (String text : btnText) {
+            JButton newButton = new JButton(text, AssetManager.getImageIcon("button.png"));
             newButton.setBorderPainted(false);
             newButton.setContentAreaFilled(false);
+            newButton.setFocusPainted(false);
             newButton.setAlignmentX(Component.CENTER_ALIGNMENT);
             newButton.setAlignmentY(Component.BOTTOM_ALIGNMENT);
+            newButton.setHorizontalTextPosition(JButton.CENTER);
+            newButton.setVerticalTextPosition(JButton.CENTER);
+            newButton.setFont(AssetManager.getFont("PressStart2P-Regular.ttf").deriveFont(30f));
             this.add(newButton);
             this.add(Box.createRigidArea(new Dimension(0, (int) (size.height * DISTANCE_BETWEEN_BUTTONS))));
             buttons.add(newButton);
