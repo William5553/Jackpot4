@@ -12,8 +12,7 @@ public class TitleScreen extends JPanel {
     private static final double DISTANCE_BETWEEN_BUTTONS = 0.05;
     private static final double BUTTON_HEIGHT = 0.65;
     private static final String[] btnImgs = {"singleplayer.png", "multiplayer.png"};
-    private static final ArrayList<JButton> buttons = new ArrayList<JButton>();
-    JButton sButton, mButton;
+    private static final ArrayList<JButton> buttons = new ArrayList<>();
 
     @Override
     public void paintComponent(Graphics g) {
