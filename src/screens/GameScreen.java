@@ -11,15 +11,16 @@ import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 
 public class GameScreen extends JPanel implements ActionListener {
-    //    private static int size = 400; // add 34 in the Y direction
-    private static final int offset = 10;
-    private static int ovalSize;// = size / 4 - offset * 2;
-    private static final int pos = offset / 2;
-    private static int incr;// = size / 4;
-    private static final int fallSpeed = 80;
+    private static final int ROWS = 6;
+    private static final int COLUMNS = 7;
 
-    // first number is rows, second is columns
-    private final int[][] pieces = new int[6][7];
+    private static final int offset = 10;
+    private static int ovalSize; // size of holes
+    private static final int pos = offset / 2;
+    private static int incr; // distance between holes
+    private static final int fallSpeed = 60; // speed at which pieces fall
+
+    private final int[][] pieces = new int[ROWS][COLUMNS];
     private GamePiece addingPiece;
     private final Timer pieceDropped;
 
@@ -39,6 +40,14 @@ public class GameScreen extends JPanel implements ActionListener {
         BufferedImage buffImg = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
         Graphics2D gbi = buffImg.createGraphics();
 
+        // Calculate total board width and height
+        int totalBoardWidth = COLUMNS * incr;
+        int totalBoardHeight = ROWS * incr;
+
+        // Calculate starting x and y coordinates for the board
+        int startX = (w - totalBoardWidth) / 2;
+        int startY = (h - totalBoardHeight) / 2;
+
         // Clear area
         //        g2d.setColor(Color.WHITE);
         //        g2d.fillRect(0, 0, w, h);
@@ -55,14 +64,14 @@ public class GameScreen extends JPanel implements ActionListener {
                     gbi.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
                 else // no piece there
                     gbi.setComposite(AlphaComposite.getInstance(AlphaComposite.CLEAR, 0.5f));
-                gbi.fillOval(incr * column + pos, incr * row + pos, ovalSize, ovalSize);
+                gbi.fillOval(startX + incr * column, startY + incr * row, ovalSize, ovalSize);
             }
         }
 
         // Draw adding piece if we have it
         if (addingPiece != null) {
             gbi.setComposite(AlphaComposite.getInstance(AlphaComposite.DST_OVER, 1.0f));
-            gbi.fillOval(addingPiece.x, addingPiece.y, ovalSize, ovalSize);
+            gbi.fillOval(startX + addingPiece.x, startY + addingPiece.y, ovalSize, ovalSize);
         }
 
         // Draws the buffered image.
@@ -70,27 +79,29 @@ public class GameScreen extends JPanel implements ActionListener {
     }
 
     public void addPiece(int column) {
-        if (addingPiece == null) {
-            if (column < 0 || column >= pieces[0].length) {
-                getToolkit().beep();
-                return;
-            }
+        if (addingPiece != null) return;
+        if (column < 0 || column >= pieces[0].length) {
+            getToolkit().beep();
+            return;
+        }
 
-            if (pieces[0][column] == 0) {
-                addingPiece = new GamePiece(0, column, incr * column + pos, 0);
-                pieceDropped.start();
-            } else {
-                getToolkit().beep();
-            }
+        // checks if the column is full
+        if (pieces[0][column] == 0) {
+            addingPiece = new GamePiece(0, column, incr * column, -ovalSize/3);
+            pieceDropped.start();
+        } else {
+            getToolkit().beep();
         }
     }
 
+    // gets called every time the timer ticks (every 50 milliseconds)
     public void actionPerformed(ActionEvent e) {
         if (addingPiece != null) {
-            addingPiece.y += fallSpeed;
-            int row = (addingPiece.y - pos) / incr + 1;
+            addingPiece.y += fallSpeed; // move the piece down
+            int row = (addingPiece.y - pos) / incr + 1; // calculate the row the piece is in
+            // if the piece is in the last row or there is a piece below it
             if (row >= pieces.length || pieces[row][addingPiece.column] == 1) {
-                pieces[row - 1][addingPiece.column] = 1;
+                pieces[row - 1][addingPiece.column] = 1; // add the piece to the board
                 addingPiece = null;
                 pieceDropped.stop();
             }
@@ -106,7 +117,14 @@ public class GameScreen extends JPanel implements ActionListener {
         pieceDropped = new Timer(50, this);
         addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
-                int column = (e.getPoint().x - pos) / incr;
+                // Calculate total board width
+                int totalBoardWidth = COLUMNS * incr;
+
+                // Calculate starting x coordinate for the board
+                int startX = (getSize().width - totalBoardWidth) / 2;
+
+                // Calculate the column based on the new starting x coordinate
+                int column = (e.getPoint().x - startX) / incr;
                 addPiece(column);
             }
         });
