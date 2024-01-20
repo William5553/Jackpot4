@@ -11,9 +11,9 @@ import java.util.ArrayList;
 
 public class TitleScreen extends JPanel {
     // represented as a percentage of the screen height
-    private static final double DISTANCE_BETWEEN_BUTTONS = 0.075;
+    private static final double DISTANCE_BETWEEN_BUTTONS = 0.025;
     private static final double BUTTON_HEIGHT = 0.5;
-    private static final String[] btnText = {"SINGLEPLAYER", "MULTIPLAYER"};
+    private static final String[] btnText = {"SINGLEPLAYER", "MULTIPLAYER", "QUIT"};
     private static final ArrayList<JButton> buttons = new ArrayList<>();
 
     @Override
@@ -78,6 +78,8 @@ public class TitleScreen extends JPanel {
             ScreenManager.setVisibility(0, false);
             ScreenManager.setVisibility(1, true);
         });
+
+        buttons.get(2).addActionListener(e -> System.exit(0));
 
         this.setVisible(true);
     }
