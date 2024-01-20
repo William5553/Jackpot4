@@ -1,3 +1,4 @@
+import util.AssetManager;
 import util.ScreenManager;
 
 import javax.swing.*;
@@ -6,6 +7,9 @@ import java.util.ArrayList;
 
 public class Connect4 {
     public void run() {
+        // play music
+        AssetManager.playSound("music.wav", true);
+
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         System.out.println("Screen size: " + screenSize);
         JFrame frame = new JFrame("Jackpot 4");

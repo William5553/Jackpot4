@@ -2,6 +2,7 @@ package screens;
 
 import util.AssetManager;
 import util.ScreenManager;
+import util.ScreenManager.Screen;
 
 import javax.swing.*;
 import java.awt.*;
@@ -70,13 +71,11 @@ public class TitleScreen extends JPanel {
         }
 
         buttons.get(0).addActionListener(e -> {
-            ScreenManager.setVisibility(0, false);
-            ScreenManager.setVisibility(1, true);
+            ScreenManager.showScreen(Screen.GAME_SCREEN);
         });
 
         buttons.get(1).addActionListener(e -> {
-            ScreenManager.setVisibility(0, false);
-            ScreenManager.setVisibility(1, true);
+            ScreenManager.showScreen(Screen.GAME_SCREEN);
         });
 
         buttons.get(2).addActionListener(e -> System.exit(0));

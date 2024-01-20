@@ -20,10 +20,11 @@ public class GameScreen extends JPanel implements ActionListener {
     private static int incr; // distance between holes
     private static final int fallSpeed = 60; // speed at which pieces fall
 
-    private final int[][] pieces = new int[ROWS][COLUMNS];
+    private final int[][] board = new int[ROWS][COLUMNS];
     private GamePiece addingPiece;
     private final Timer pieceDropped;
 
+    private int currentPlayer = 1;
     private Color currentPieceColor = Color.RED;
 
     @Override
@@ -58,9 +59,9 @@ public class GameScreen extends JPanel implements ActionListener {
 
         // Draw pieces or holes
         gbi.setColor(currentPieceColor);
-        for (int row = 0; row < pieces.length; row++) {
-            for (int column = 0; column < pieces[0].length; column++) {
-                if (pieces[row][column] == 1) // if there is a piece there
+        for (int row = 0; row < board.length; row++) {
+            for (int column = 0; column < board[0].length; column++) {
+                if (board[row][column] == 1) // if there is a piece there
                     gbi.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
                 else // no piece there
                     gbi.setComposite(AlphaComposite.getInstance(AlphaComposite.CLEAR, 0.5f));
@@ -78,15 +79,24 @@ public class GameScreen extends JPanel implements ActionListener {
         g2d.drawImage(buffImg, null, 0, 0);
     }
 
+    public void restartGame(int numPlayers) {
+        for (int row = 0; row < board.length; row++) {
+            for (int column = 0; column < board[0].length; column++) {
+                board[row][column] = 0;
+            }
+        }
+        repaint();
+    }
+
     public void addPiece(int column) {
         if (addingPiece != null) return;
-        if (column < 0 || column >= pieces[0].length) {
+        if (column < 0 || column >= board[0].length) {
             getToolkit().beep();
             return;
         }
 
         // checks if the column is full
-        if (pieces[0][column] == 0) {
+        if (board[0][column] == 0) {
             addingPiece = new GamePiece(0, column, incr * column, -ovalSize/3);
             pieceDropped.start();
         } else {
@@ -100,8 +110,8 @@ public class GameScreen extends JPanel implements ActionListener {
             addingPiece.y += fallSpeed; // move the piece down
             int row = (addingPiece.y - pos) / incr + 1; // calculate the row the piece is in
             // if the piece is in the last row or there is a piece below it
-            if (row >= pieces.length || pieces[row][addingPiece.column] == 1) {
-                pieces[row - 1][addingPiece.column] = 1; // add the piece to the board
+            if (row >= board.length || board[row][addingPiece.column] == 1) {
+                board[row - 1][addingPiece.column] = 1; // add the piece to the board
                 addingPiece = null;
                 pieceDropped.stop();
             }
@@ -113,11 +123,10 @@ public class GameScreen extends JPanel implements ActionListener {
         System.out.println("Initializing game screen");
         this.setSize(size);
         this.setVisible(false);
-        setBounds(0, 0, size.width, size.height + 34);
-        pieceDropped = new Timer(50, this);
+        setBounds(0, 0, size.width, size.height);
+        pieceDropped = new Timer(50, this); // timer that calls actionPerformed every 50 milliseconds
         addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
-                // Calculate total board width
                 int totalBoardWidth = COLUMNS * incr;
 
                 // Calculate starting x coordinate for the board
