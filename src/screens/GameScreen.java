@@ -83,7 +83,10 @@ public class GameScreen extends JPanel implements ActionListener {
         // Draw the player's turn
         g2d.setColor(currentPlayer == 1 ? Color.RED : Color.BLUE);
         g2d.setFont(new Font("Arial", Font.BOLD, 20));
-        g2d.drawString("Player " + currentPlayer + "'s turn", 10, 20);
+        if (numPlayers == 1)
+            g2d.drawString((currentPlayer == 1 ? "Your" : "Computer's") + " turn", 10, 20);
+        else
+            g2d.drawString("Player " + currentPlayer + "'s turn", 10, 20);
     }
 
     public void restartGame(int numPlayers) {
