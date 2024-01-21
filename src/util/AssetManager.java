@@ -34,14 +34,14 @@ public class AssetManager {
 
     public static void playSound(String name, boolean loops) {
         try {
-            File musicPath = new File("src/assets/" + name);
+            File audioFile = new File("src/assets/sounds/" + name + ".wav");
 
-            if (musicPath.exists()) {
-                AudioInputStream audioInput = AudioSystem.getAudioInputStream(musicPath);
+            if (audioFile.exists()) {
+                AudioInputStream audioInput = AudioSystem.getAudioInputStream(audioFile);
                 Clip clip = AudioSystem.getClip();
                 clip.open(audioInput);
                 if (loops) clip.loop(Clip.LOOP_CONTINUOUSLY);
-                if (name.equals("music.wav")) {
+                if (name.equals("music")) {
                     musicVolume = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
                     musicVolume.setValue(-15.0f);
                 }

@@ -1,6 +1,7 @@
 package screens;
 
 import structs.GamePiece;
+import util.AssetManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -9,6 +10,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
+import java.util.Random;
 
 public class GameScreen extends JPanel implements ActionListener {
     private static final int ROWS = 6;
@@ -22,6 +24,7 @@ public class GameScreen extends JPanel implements ActionListener {
     private int[][] board;
     private GamePiece addingPiece;
     private final Timer pieceDropped;
+    private final Random rand = new Random();
 
     private int numPlayers;
     private int currentPlayer = 1;
@@ -76,9 +79,9 @@ public class GameScreen extends JPanel implements ActionListener {
         g2d.drawImage(buffImg, null, 0, 0);
     }
 
-    public void restartGame(int numPlayers) {
+    public void restartGame(int numPlrs) {
         board = new int[ROWS][COLUMNS];
-        this.numPlayers = numPlayers;
+        this.numPlayers = numPlrs;
         repaint();
     }
 
@@ -105,6 +108,8 @@ public class GameScreen extends JPanel implements ActionListener {
             int row = (addingPiece.y - offset / 2) / incr + 1; // calculate the row the piece is in
             // if the piece is in the last row or there is a piece below it
             if (row >= board.length || board[row][addingPiece.column] != 0) {
+                // plays a random drop sound
+                AssetManager.playSound("drop" + rand.nextInt(1, 5), false);
                 board[row - 1][addingPiece.column] = currentPlayer; // add the piece to the board
                 addingPiece = null;
                 pieceDropped.stop();

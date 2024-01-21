@@ -8,7 +8,7 @@ import java.util.ArrayList;
 public class Connect4 {
     public void run() {
         // play music
-        AssetManager.playSound("music.wav", true);
+        AssetManager.playSound("music", true);
 
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         System.out.println("Screen size: " + screenSize);
