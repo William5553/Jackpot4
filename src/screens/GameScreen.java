@@ -77,6 +77,11 @@ public class GameScreen extends JPanel implements ActionListener {
 
         // Draws the buffered image.
         g2d.drawImage(buffImg, null, 0, 0);
+
+        // Draw the player's turn
+        g2d.setColor(Color.BLACK);
+        g2d.setFont(new Font("Arial", Font.BOLD, 20));
+        g2d.drawString("Player " + currentPlayer + "'s turn", 10, 20);
     }
 
     public void restartGame(int numPlrs) {
