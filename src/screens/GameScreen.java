@@ -57,7 +57,6 @@ public class GameScreen extends JPanel implements ActionListener {
         gbi.fillRect(0, 0, screenSize.width, screenSize.height);
 
         // Draw pieces or holes
-        gbi.setColor(Color.RED);
         for (int row = 0; row < board.length; row++) {
             for (int column = 0; column < board[0].length; column++) {
                 if (board[row][column] != 0) {// if there is a piece there
@@ -71,6 +70,7 @@ public class GameScreen extends JPanel implements ActionListener {
 
         // Draw adding piece if we have it
         if (addingPiece != null) {
+            gbi.setColor(addingPiece.player == 1 ? Color.RED : Color.BLUE);
             gbi.setComposite(AlphaComposite.getInstance(AlphaComposite.DST_OVER, 1.0f));
             gbi.fillOval(startX + addingPiece.x, startY + addingPiece.y, ovalSize, ovalSize);
         }
@@ -84,9 +84,9 @@ public class GameScreen extends JPanel implements ActionListener {
         g2d.drawString("Player " + currentPlayer + "'s turn", 10, 20);
     }
 
-    public void restartGame(int numPlrs) {
+    public void restartGame(int numPlayers) {
         board = new int[ROWS][COLUMNS];
-        this.numPlayers = numPlrs;
+        this.numPlayers = numPlayers;
         repaint();
     }
 
@@ -99,7 +99,7 @@ public class GameScreen extends JPanel implements ActionListener {
 
         // checks if the column is full
         if (board[0][column] == 0) {
-            addingPiece = new GamePiece(0, column, incr * column, -ovalSize / 3);
+            addingPiece = new GamePiece(0, column, incr * column, -ovalSize / 3, currentPlayer);
             pieceDropped.start();
         } else {
             getToolkit().beep();
