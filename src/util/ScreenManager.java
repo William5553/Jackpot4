@@ -34,6 +34,10 @@ public class ScreenManager {
         screens.get(screen.ordinal()).setVisible(true);
     }
 
+    public static Object getScreen(Screen screen) {
+        return screens.get(screen.ordinal());
+    }
+
     public ScreenManager(Dimension screenSize) {
         this.screenSize = screenSize;
     }

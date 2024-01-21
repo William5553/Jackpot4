@@ -19,10 +19,11 @@ public class GameScreen extends JPanel implements ActionListener {
     private static int incr; // distance between holes
     private static final int fallSpeed = 80; // speed at which pieces fall
 
-    private int[][] board = new int[ROWS][COLUMNS];
+    private int[][] board;
     private GamePiece addingPiece;
     private final Timer pieceDropped;
 
+    private int numPlayers;
     private int currentPlayer = 1;
     private Color currentPieceColor = Color.RED;
 
@@ -77,6 +78,7 @@ public class GameScreen extends JPanel implements ActionListener {
 
     public void restartGame(int numPlayers) {
         board = new int[ROWS][COLUMNS];
+        this.numPlayers = numPlayers;
         repaint();
     }
 
@@ -102,8 +104,8 @@ public class GameScreen extends JPanel implements ActionListener {
             addingPiece.y += fallSpeed; // move the piece down
             int row = (addingPiece.y - offset / 2) / incr + 1; // calculate the row the piece is in
             // if the piece is in the last row or there is a piece below it
-            if (row >= board.length || board[row][addingPiece.column] == 1) {
-                board[row - 1][addingPiece.column] = 1; // add the piece to the board
+            if (row >= board.length || board[row][addingPiece.column] != 0) {
+                board[row - 1][addingPiece.column] = currentPlayer; // add the piece to the board
                 addingPiece = null;
                 pieceDropped.stop();
             }

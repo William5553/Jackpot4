@@ -71,10 +71,12 @@ public class TitleScreen extends JPanel {
         }
 
         buttons.get(0).addActionListener(e -> {
+            ((GameScreen) ScreenManager.getScreen(Screen.GAME_SCREEN)).restartGame(1);
             ScreenManager.showScreen(Screen.GAME_SCREEN);
         });
 
         buttons.get(1).addActionListener(e -> {
+            ((GameScreen) ScreenManager.getScreen(Screen.GAME_SCREEN)).restartGame(2);
             ScreenManager.showScreen(Screen.GAME_SCREEN);
         });
 
