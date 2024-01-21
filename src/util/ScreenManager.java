@@ -40,8 +40,8 @@ public class ScreenManager {
         return screens.get(screen.ordinal());
     }
 
-    public static JButton createButton(String text) {
-        JButton newButton = new JButton(text, AssetManager.getImageIcon("button.png"));
+    public static JButton createButton(String text, int width) {
+        JButton newButton = new JButton(text, AssetManager.getScaledImageIcon("button.png", width));
         newButton.setBorderPainted(false);
         newButton.setContentAreaFilled(false);
         newButton.setFocusPainted(false);
@@ -55,12 +55,12 @@ public class ScreenManager {
         newButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
-                newButton.setIcon(AssetManager.getImageIcon("hover.png"));
+                newButton.setIcon(AssetManager.getScaledImageIcon("hover.png", width));
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                newButton.setIcon(AssetManager.getImageIcon("button.png"));
+                newButton.setIcon(AssetManager.getScaledImageIcon("button.png", width));
             }
         });
 

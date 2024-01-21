@@ -13,7 +13,7 @@ import java.util.ArrayList;
 public class TitleScreen extends JPanel {
     // represented as a percentage of the screen height
     private static final double DISTANCE_BETWEEN_BUTTONS = 0.025;
-    private static final double BUTTON_HEIGHT = 0.5;
+    private static final double BUTTON_HEIGHT = 0.45;
     private static final String[] btnText = {"SINGLEPLAYER", "MULTIPLAYER", "QUIT"};
     private static final ArrayList<JButton> buttons = new ArrayList<>();
 
@@ -40,7 +40,7 @@ public class TitleScreen extends JPanel {
         this.add(new Box.Filler(gap, gap, gap)); // make a gap between the top of the screen and the buttons
 
         for (String text : btnText) {
-            JButton newButton = ScreenManager.createButton(text);
+            JButton newButton = ScreenManager.createButton(text, size.width / 4);
             newButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 
             this.add(newButton);

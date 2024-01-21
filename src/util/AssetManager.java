@@ -22,6 +22,12 @@ public class AssetManager {
         return getImageIcon(fileName).getImage();
     }
 
+    public static ImageIcon getScaledImageIcon(String fileName, int width) {
+        // get the image width and height, find the aspect ratio, and scale the image
+        int height = (int) (getImage(fileName).getHeight(null) * ((double) width / getImage(fileName).getWidth(null)));
+        return new ImageIcon(getImage(fileName).getScaledInstance(width, height, Image.SCALE_SMOOTH));
+    }
+
     public static Font getFont(String fontName) {
         try {
             return Font.createFont(Font.TRUETYPE_FONT, AssetManager.class.getResourceAsStream("/assets/" + fontName));

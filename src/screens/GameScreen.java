@@ -22,6 +22,7 @@ public class GameScreen extends JPanel implements ActionListener {
     private static int ovalSize; // size of holes
     private static int incr; // distance between holes
     private static final int fallSpeed = 80; // speed at which pieces fall
+    private static final int gridSizeRatio = 12;
 
     private int[][] board;
     private GamePiece addingPiece;
@@ -82,11 +83,11 @@ public class GameScreen extends JPanel implements ActionListener {
 
         // Draw the player's turn
         g2d.setColor(getPieceColor(currentPlayer));
-        g2d.setFont(new Font("Arial", Font.BOLD, 20));
+        g2d.setFont(AssetManager.getFont("PressStart2P-Regular.ttf").deriveFont(18f));
         if (numPlayers == 1)
-            g2d.drawString((currentPlayer == 1 ? "Your" : "Computer's") + " turn", 10, 20);
+            g2d.drawString((currentPlayer == 1 ? "Your" : "Computer's") + " turn", 10, 30);
         else
-            g2d.drawString("Player " + currentPlayer + "'s turn", 10, 20);
+            g2d.drawString("Player " + currentPlayer + "'s turn", 10, 30);
     }
 
     public void restartGame(int numPlayers) {
@@ -218,7 +219,11 @@ public class GameScreen extends JPanel implements ActionListener {
         System.out.println("Initializing game screen");
         this.setSize(size);
         this.setVisible(false);
-        setBounds(0, 0, size.width, size.height);
+        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+
+        ovalSize = size.width / gridSizeRatio - offset * 2; // size of holes
+        incr = size.width / gridSizeRatio; // distance between holes
+
         pieceDropped = new Timer(50, this); // timer that calls actionPerformed every 50 milliseconds
         addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
@@ -232,14 +237,14 @@ public class GameScreen extends JPanel implements ActionListener {
                 addPiece(column, currentPlayer);
             }
         });
-        int randomNumberThatWorks = 12;
-        ovalSize = size.width / randomNumberThatWorks - offset * 2; // size of holes
-        incr = size.width / randomNumberThatWorks; // distance between holes
+
+        Dimension gap = new Dimension(0, (int) (size.height * .825));
+        this.add(new Box.Filler(gap, gap, gap)); // make a gap between the top of the screen and the buttons
 
         // add the back button
-        //        JButton backBtn = ScreenManager.createButton("QUIT");
-        //        backBtn.addActionListener(e -> ScreenManager.showScreen(Screen.TITLE_SCREEN));
+        JButton backBtn = ScreenManager.createButton("MAIN MENU", size.width / 6);
+        backBtn.addActionListener(e -> ScreenManager.showScreen(Screen.TITLE_SCREEN));
 
-        //        this.add(backBtn);
+        this.add(backBtn);
     }
 }
