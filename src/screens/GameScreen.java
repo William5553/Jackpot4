@@ -16,7 +16,6 @@ public class GameScreen extends JPanel implements ActionListener {
 
     private static final int offset = 10;
     private static int ovalSize; // size of holes
-    private static final int pos = offset / 2;
     private static int incr; // distance between holes
     private static final int fallSpeed = 60; // speed at which pieces fall
 
@@ -34,11 +33,9 @@ public class GameScreen extends JPanel implements ActionListener {
         Graphics2D g2d = (Graphics2D) g;
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-        Dimension d = getSize();
-        int w = d.width;
-        int h = d.height;
+        Dimension screenSize = getSize();
 
-        BufferedImage buffImg = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+        BufferedImage buffImg = new BufferedImage(screenSize.width, screenSize.height, BufferedImage.TYPE_INT_ARGB);
         Graphics2D gbi = buffImg.createGraphics();
 
         // Calculate total board width and height
@@ -46,8 +43,8 @@ public class GameScreen extends JPanel implements ActionListener {
         int totalBoardHeight = ROWS * incr;
 
         // Calculate starting x and y coordinates for the board
-        int startX = (w - totalBoardWidth) / 2;
-        int startY = (h - totalBoardHeight) / 2;
+        int startX = (screenSize.width - totalBoardWidth) / 2;
+        int startY = (screenSize.height - totalBoardHeight) / 2;
 
         // Clear area
         //        g2d.setColor(Color.WHITE);
@@ -55,7 +52,7 @@ public class GameScreen extends JPanel implements ActionListener {
 
         // Draw screen
         gbi.setColor(Color.decode("#dcb639")); // colour of the board
-        gbi.fillRect(0, 0, w, h);
+        gbi.fillRect(0, 0, screenSize.width, screenSize.height);
 
         // Draw pieces or holes
         gbi.setColor(currentPieceColor);
@@ -97,7 +94,7 @@ public class GameScreen extends JPanel implements ActionListener {
 
         // checks if the column is full
         if (board[0][column] == 0) {
-            addingPiece = new GamePiece(0, column, incr * column, -ovalSize/3);
+            addingPiece = new GamePiece(0, column, incr * column, -ovalSize / 3);
             pieceDropped.start();
         } else {
             getToolkit().beep();
@@ -108,7 +105,7 @@ public class GameScreen extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (addingPiece != null) {
             addingPiece.y += fallSpeed; // move the piece down
-            int row = (addingPiece.y - pos) / incr + 1; // calculate the row the piece is in
+            int row = (addingPiece.y - offset / 2) / incr + 1; // calculate the row the piece is in
             // if the piece is in the last row or there is a piece below it
             if (row >= board.length || board[row][addingPiece.column] == 1) {
                 board[row - 1][addingPiece.column] = 1; // add the piece to the board
@@ -137,7 +134,7 @@ public class GameScreen extends JPanel implements ActionListener {
                 addPiece(column);
             }
         });
-        int randomNumberThatWorks = 15;
+        int randomNumberThatWorks = 12;
         ovalSize = size.width / randomNumberThatWorks - offset * 2; // size of holes
         incr = size.width / randomNumberThatWorks; // distance between holes
     }
