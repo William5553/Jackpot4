@@ -17,9 +17,9 @@ public class GameScreen extends JPanel implements ActionListener {
     private static final int offset = 10;
     private static int ovalSize; // size of holes
     private static int incr; // distance between holes
-    private static final int fallSpeed = 60; // speed at which pieces fall
+    private static final int fallSpeed = 80; // speed at which pieces fall
 
-    private final int[][] board = new int[ROWS][COLUMNS];
+    private int[][] board = new int[ROWS][COLUMNS];
     private GamePiece addingPiece;
     private final Timer pieceDropped;
 
@@ -50,7 +50,6 @@ public class GameScreen extends JPanel implements ActionListener {
         //        g2d.setColor(Color.WHITE);
         //        g2d.fillRect(0, 0, w, h);
 
-        // Draw screen
         gbi.setColor(Color.decode("#dcb639")); // colour of the board
         gbi.fillRect(0, 0, screenSize.width, screenSize.height);
 
@@ -77,11 +76,7 @@ public class GameScreen extends JPanel implements ActionListener {
     }
 
     public void restartGame(int numPlayers) {
-        for (int row = 0; row < board.length; row++) {
-            for (int column = 0; column < board[0].length; column++) {
-                board[row][column] = 0;
-            }
-        }
+        board = new int[ROWS][COLUMNS];
         repaint();
     }
 
