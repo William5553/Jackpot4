@@ -62,7 +62,7 @@ public class GameScreen extends JPanel implements ActionListener {
         for (int row = 0; row < board.length; row++) {
             for (int column = 0; column < board[0].length; column++) {
                 if (board[row][column] != 0) {// if there is a piece there
-                    gbi.setColor(board[row][column] == 1 ? Color.RED : Color.BLUE);
+                    gbi.setColor(getPieceColor(board[row][column]));
                     gbi.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
                 } else // no piece there
                     gbi.setComposite(AlphaComposite.getInstance(AlphaComposite.CLEAR, 0.5f));
@@ -72,7 +72,7 @@ public class GameScreen extends JPanel implements ActionListener {
 
         // Draw adding piece if we have it
         if (addingPiece != null) {
-            gbi.setColor(addingPiece.player == 1 ? Color.RED : Color.BLUE);
+            gbi.setColor(getPieceColor(addingPiece.player));
             gbi.setComposite(AlphaComposite.getInstance(AlphaComposite.DST_OVER, 1.0f));
             gbi.fillOval(startX + addingPiece.x, startY + addingPiece.y, ovalSize, ovalSize);
         }
@@ -81,7 +81,7 @@ public class GameScreen extends JPanel implements ActionListener {
         g2d.drawImage(buffImg, null, 0, 0);
 
         // Draw the player's turn
-        g2d.setColor(currentPlayer == 1 ? Color.RED : Color.BLUE);
+        g2d.setColor(getPieceColor(currentPlayer));
         g2d.setFont(new Font("Arial", Font.BOLD, 20));
         if (numPlayers == 1)
             g2d.drawString((currentPlayer == 1 ? "Your" : "Computer's") + " turn", 10, 20);
@@ -208,6 +208,10 @@ public class GameScreen extends JPanel implements ActionListener {
             }
         }
         return tie;
+    }
+
+    private Color getPieceColor(int player) {
+        return player == 1 ? Color.RED : Color.BLUE;
     }
 
     public GameScreen(Dimension size) {
