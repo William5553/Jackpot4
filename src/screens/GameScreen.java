@@ -2,6 +2,8 @@ package screens;
 
 import structs.GamePiece;
 import util.AssetManager;
+import util.ScreenManager;
+import util.ScreenManager.Screen;
 
 import javax.swing.*;
 import java.awt.*;
@@ -79,7 +81,7 @@ public class GameScreen extends JPanel implements ActionListener {
         g2d.drawImage(buffImg, null, 0, 0);
 
         // Draw the player's turn
-        g2d.setColor(Color.BLACK);
+        g2d.setColor(currentPlayer == 1 ? Color.RED : Color.BLUE);
         g2d.setFont(new Font("Arial", Font.BOLD, 20));
         g2d.drawString("Player " + currentPlayer + "'s turn", 10, 20);
     }
@@ -87,7 +89,8 @@ public class GameScreen extends JPanel implements ActionListener {
     public void restartGame(int numPlayers) {
         board = new int[ROWS][COLUMNS];
         this.numPlayers = numPlayers;
-        repaint();
+        currentPlayer = 1;
+        this.repaint();
     }
 
     public void addPiece(int column) {
@@ -125,13 +128,29 @@ public class GameScreen extends JPanel implements ActionListener {
                     JOptionPane.showMessageDialog(this, "Player " + winner + " wins!");
                     restartGame(numPlayers);
                 } else {
-                    // switch players
-                    currentPlayer++;
-                    if (currentPlayer > numPlayers) currentPlayer = 1;
+                    // check for a tie
+                    boolean tie = true;
+                    for (int[] row1 : board) {
+                        for (int column = 0; column < board[0].length; column++) {
+                            if (row1[column] == 0) {
+                                tie = false;
+                                break;
+                            }
+                        }
+                    }
+                    if (tie) {
+                        JOptionPane.showMessageDialog(this, "It's a tie!");
+                        restartGame(numPlayers);
+                    } else {
+                        // switch players
+                        currentPlayer++;
+                        if (currentPlayer > numPlayers)
+                            currentPlayer = 1;
+                    }
                 }
             }
         }
-        repaint();
+        this.repaint();
     }
 
     private int checkForWin() {
@@ -195,5 +214,11 @@ public class GameScreen extends JPanel implements ActionListener {
         int randomNumberThatWorks = 12;
         ovalSize = size.width / randomNumberThatWorks - offset * 2; // size of holes
         incr = size.width / randomNumberThatWorks; // distance between holes
+
+        // add the back button
+//        JButton backBtn = ScreenManager.createButton("QUIT");
+//        backBtn.addActionListener(e -> ScreenManager.showScreen(Screen.TITLE_SCREEN));
+
+//        this.add(backBtn);
     }
 }

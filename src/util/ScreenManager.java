@@ -5,6 +5,8 @@ import screens.TitleScreen;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 public class ScreenManager {
@@ -36,6 +38,33 @@ public class ScreenManager {
 
     public static Object getScreen(Screen screen) {
         return screens.get(screen.ordinal());
+    }
+
+    public static JButton createButton(String text) {
+        JButton newButton = new JButton(text, AssetManager.getImageIcon("button.png"));
+        newButton.setBorderPainted(false);
+        newButton.setContentAreaFilled(false);
+        newButton.setFocusPainted(false);
+
+        newButton.setHorizontalTextPosition(JButton.CENTER);
+        newButton.setVerticalTextPosition(JButton.CENTER);
+        newButton.setFont(AssetManager.getFont("PressStart2P-Regular.ttf").deriveFont(23f));
+        newButton.setForeground(Color.BLACK);
+
+        // change image when hovered over
+        newButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                newButton.setIcon(AssetManager.getImageIcon("hover.png"));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                newButton.setIcon(AssetManager.getImageIcon("button.png"));
+            }
+        });
+
+        return newButton;
     }
 
     public ScreenManager(Dimension screenSize) {

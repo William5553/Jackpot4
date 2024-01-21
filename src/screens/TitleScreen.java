@@ -40,29 +40,8 @@ public class TitleScreen extends JPanel {
         this.add(new Box.Filler(gap, gap, gap)); // make a gap between the top of the screen and the buttons
 
         for (String text : btnText) {
-            JButton newButton = new JButton(text, AssetManager.getImageIcon("button.png"));
-            newButton.setBorderPainted(false);
-            newButton.setContentAreaFilled(false);
-            newButton.setFocusPainted(false);
+            JButton newButton = ScreenManager.createButton(text);
             newButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-            newButton.setAlignmentY(Component.BOTTOM_ALIGNMENT);
-            newButton.setHorizontalTextPosition(JButton.CENTER);
-            newButton.setVerticalTextPosition(JButton.CENTER);
-            newButton.setFont(AssetManager.getFont("PressStart2P-Regular.ttf").deriveFont(23f));
-            newButton.setForeground(Color.BLACK);
-
-            // change image when hovered over
-            newButton.addMouseListener(new MouseAdapter() {
-                @Override
-                public void mouseEntered(MouseEvent e) {
-                    newButton.setIcon(AssetManager.getImageIcon("hover.png"));
-                }
-
-                @Override
-                public void mouseExited(MouseEvent e) {
-                    newButton.setIcon(AssetManager.getImageIcon("button.png"));
-                }
-            });
 
             this.add(newButton);
             // create a gap between buttons
