@@ -93,7 +93,7 @@ public class GameScreen extends JPanel implements ActionListener {
         this.repaint();
     }
 
-    public void addPiece(int column) {
+    public void addPiece(int column, int player) {
         if (addingPiece != null) return;
         if (column < 0 || column >= board[0].length) {
             getToolkit().beep();
@@ -102,7 +102,7 @@ public class GameScreen extends JPanel implements ActionListener {
 
         // checks if the column is full
         if (board[0][column] == 0) {
-            addingPiece = new GamePiece(0, column, incr * column, -ovalSize / 3, currentPlayer);
+            addingPiece = new GamePiece(0, column, incr * column, -ovalSize / 3, player);
             pieceDropped.start();
         } else {
             getToolkit().beep();
@@ -144,7 +144,21 @@ public class GameScreen extends JPanel implements ActionListener {
                     } else {
                         // switch players
                         currentPlayer++;
-                        if (currentPlayer > numPlayers)
+
+                        // if it's singleplayer mode, and it's the computer's turn
+                        // addingPiece == null is necessary or else infinite loop
+                        if (numPlayers == 1 && currentPlayer == 2 && addingPiece == null) {
+                            int computerColumn = rand.nextInt(COLUMNS);
+                            // if the column is full, keep generating random numbers until it's not
+                            while (board[0][computerColumn] != 0)
+                                computerColumn = rand.nextInt(COLUMNS);
+                            addPiece(computerColumn, currentPlayer);
+                        }
+
+                        // switch back to the human player after the computer's move is made
+                        if (numPlayers == 1 && currentPlayer == 3)
+                            currentPlayer = 1;
+                        else if (numPlayers > 1 && currentPlayer > numPlayers)
                             currentPlayer = 1;
                     }
                 }
@@ -208,7 +222,7 @@ public class GameScreen extends JPanel implements ActionListener {
 
                 // Calculate the column based on the new starting x coordinate
                 int column = (e.getPoint().x - startX) / incr;
-                addPiece(column);
+                addPiece(column, currentPlayer);
             }
         });
         int randomNumberThatWorks = 12;
