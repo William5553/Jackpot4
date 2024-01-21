@@ -28,7 +28,6 @@ public class GameScreen extends JPanel implements ActionListener {
 
     private int numPlayers;
     private int currentPlayer = 1;
-    private Color currentPieceColor = Color.RED;
 
     @Override
     public void paintComponent(Graphics g) {
@@ -58,12 +57,13 @@ public class GameScreen extends JPanel implements ActionListener {
         gbi.fillRect(0, 0, screenSize.width, screenSize.height);
 
         // Draw pieces or holes
-        gbi.setColor(currentPieceColor);
+        gbi.setColor(Color.RED);
         for (int row = 0; row < board.length; row++) {
             for (int column = 0; column < board[0].length; column++) {
-                if (board[row][column] == 1) // if there is a piece there
+                if (board[row][column] != 0) {// if there is a piece there
+                    gbi.setColor(board[row][column] == 1 ? Color.RED : Color.BLUE);
                     gbi.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
-                else // no piece there
+                } else // no piece there
                     gbi.setComposite(AlphaComposite.getInstance(AlphaComposite.CLEAR, 0.5f));
                 gbi.fillOval(startX + incr * column, startY + incr * row, ovalSize, ovalSize);
             }
@@ -113,9 +113,60 @@ public class GameScreen extends JPanel implements ActionListener {
                 board[row - 1][addingPiece.column] = currentPlayer; // add the piece to the board
                 addingPiece = null;
                 pieceDropped.stop();
+
+                // check for wins
+                int winner = checkForWin();
+                if (winner != 0) {
+                    JOptionPane.showMessageDialog(this, "Player " + winner + " wins!");
+                    restartGame(numPlayers);
+                } else {
+                    // switch players
+                    currentPlayer++;
+                    if (currentPlayer > numPlayers) currentPlayer = 1;
+                }
             }
         }
         repaint();
+    }
+
+    private int checkForWin() {
+        // check for horizontal wins
+        for (int row = 0; row < board.length; row++) {
+            for (int column = 0; column < board[0].length - 3; column++) {
+                if (board[row][column] != 0 && board[row][column] == board[row][column + 1] && board[row][column] == board[row][column + 2] && board[row][column] == board[row][column + 3]) {
+                    return board[row][column];
+                }
+            }
+        }
+
+        // check for vertical wins
+        for (int row = 0; row < board.length - 3; row++) {
+            for (int column = 0; column < board[0].length; column++) {
+                if (board[row][column] != 0 && board[row][column] == board[row + 1][column] && board[row][column] == board[row + 2][column] && board[row][column] == board[row + 3][column]) {
+                    return board[row][column];
+                }
+            }
+        }
+
+        // check for diagonal wins
+        for (int row = 0; row < board.length - 3; row++) {
+            for (int column = 0; column < board[0].length - 3; column++) {
+                if (board[row][column] != 0 && board[row][column] == board[row + 1][column + 1] && board[row][column] == board[row + 2][column + 2] && board[row][column] == board[row + 3][column + 3]) {
+                    return board[row][column];
+                }
+            }
+        }
+
+        // check for diagonal wins
+        for (int row = 0; row < board.length - 3; row++) {
+            for (int column = 3; column < board[0].length; column++) {
+                if (board[row][column] != 0 && board[row][column] == board[row + 1][column - 1] && board[row][column] == board[row + 2][column - 2] && board[row][column] == board[row + 3][column - 3]) {
+                    return board[row][column];
+                }
+            }
+        }
+
+        return 0;
     }
 
     public GameScreen(Dimension size) {
