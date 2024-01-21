@@ -90,18 +90,15 @@ public class GameScreen extends JPanel implements ActionListener {
     }
 
     public void restartGame(int numPlayers) {
-        board = new int[ROWS][COLUMNS];
-        this.numPlayers = numPlayers;
+        board = new int[ROWS][COLUMNS]; // reset the board
+        this.numPlayers = numPlayers; // set the number of players
         currentPlayer = 1;
         this.repaint();
     }
 
     public void addPiece(int column, int player) {
-        if (addingPiece != null) return;
-        if (column < 0 || column >= board[0].length) {
-            getToolkit().beep();
-            return;
-        }
+        if (addingPiece != null) return; // if there is already a piece being added, don't add another one
+        if (column < 0 || column >= board[0].length) return; // if the column is out of bounds
 
         // checks if the column is full
         if (board[0][column] == 0) {
@@ -114,56 +111,47 @@ public class GameScreen extends JPanel implements ActionListener {
 
     // gets called every time the timer ticks (every 50 milliseconds)
     public void actionPerformed(ActionEvent e) {
-        if (addingPiece != null) {
-            addingPiece.y += fallSpeed; // move the piece down
-            int row = (addingPiece.y - offset / 2) / incr + 1; // calculate the row the piece is in
-            // if the piece is in the last row or there is a piece below it
-            if (row >= board.length || board[row][addingPiece.column] != 0) {
-                // plays a random drop sound
-                AssetManager.playSound("drop" + rand.nextInt(1, 5), false);
-                board[row - 1][addingPiece.column] = currentPlayer; // add the piece to the board
-                addingPiece = null;
-                pieceDropped.stop();
+        if (addingPiece == null) return; // if there is no piece being added, don't do anything
 
-                // check for wins
-                int winner = checkForWin();
-                if (winner != 0) {
-                    JOptionPane.showMessageDialog(this, "Player " + winner + " wins!");
+        addingPiece.y += fallSpeed; // move the piece down
+        int row = (addingPiece.y - offset / 2) / incr + 1; // calculate the row the piece is in
+        // if the piece is in the last row or there is a piece below it
+        if (row >= board.length || board[row][addingPiece.column] != 0) {
+            // plays a random drop sound
+            AssetManager.playSound("drop" + rand.nextInt(1, 5), false);
+            board[row - 1][addingPiece.column] = currentPlayer; // add the piece to the board
+            addingPiece = null;
+            pieceDropped.stop();
+
+            // check for wins
+            int winner = checkForWin();
+            if (winner != 0) {
+                JOptionPane.showMessageDialog(this, "Player " + winner + " wins!");
+                restartGame(numPlayers);
+            } else {
+                boolean tie = checkForTie();
+                if (tie) {
+                    JOptionPane.showMessageDialog(this, "It's a tie!");
                     restartGame(numPlayers);
                 } else {
-                    // check for a tie
-                    boolean tie = true;
-                    for (int[] row1 : board) {
-                        for (int column = 0; column < board[0].length; column++) {
-                            if (row1[column] == 0) {
-                                tie = false;
-                                break;
-                            }
-                        }
-                    }
-                    if (tie) {
-                        JOptionPane.showMessageDialog(this, "It's a tie!");
-                        restartGame(numPlayers);
-                    } else {
-                        // switch players
-                        currentPlayer++;
+                    // switch players
+                    currentPlayer++;
 
-                        // if it's singleplayer mode, and it's the computer's turn
-                        // addingPiece == null is necessary or else infinite loop
-                        if (numPlayers == 1 && currentPlayer == 2 && addingPiece == null) {
-                            int computerColumn = rand.nextInt(COLUMNS);
-                            // if the column is full, keep generating random numbers until it's not
-                            while (board[0][computerColumn] != 0)
-                                computerColumn = rand.nextInt(COLUMNS);
-                            addPiece(computerColumn, currentPlayer);
-                        }
-
-                        // switch back to the human player after the computer's move is made
-                        if (numPlayers == 1 && currentPlayer == 3)
-                            currentPlayer = 1;
-                        else if (numPlayers > 1 && currentPlayer > numPlayers)
-                            currentPlayer = 1;
+                    // if it's singleplayer mode, and it's the computer's turn
+                    // addingPiece == null is necessary or else infinite loop
+                    if (numPlayers == 1 && currentPlayer == 2 && addingPiece == null) {
+                        int computerColumn = rand.nextInt(COLUMNS);
+                        // if the column is full, keep generating random numbers until it's not
+                        while (board[0][computerColumn] != 0)
+                            computerColumn = rand.nextInt(COLUMNS);
+                        addPiece(computerColumn, currentPlayer);
                     }
+
+                    // switch back to the human player after the computer's move is made
+                    if (numPlayers == 1 && currentPlayer == 3)
+                        currentPlayer = 1;
+                    else if (numPlayers > 1 && currentPlayer > numPlayers)
+                        currentPlayer = 1;
                 }
             }
         }
@@ -197,8 +185,6 @@ public class GameScreen extends JPanel implements ActionListener {
                 }
             }
         }
-
-        // check for diagonal wins
         for (int row = 0; row < board.length - 3; row++) {
             for (int column = 3; column < board[0].length; column++) {
                 if (board[row][column] != 0 && board[row][column] == board[row + 1][column - 1] && board[row][column] == board[row + 2][column - 2] && board[row][column] == board[row + 3][column - 3]) {
@@ -208,6 +194,20 @@ public class GameScreen extends JPanel implements ActionListener {
         }
 
         return 0;
+    }
+
+    private boolean checkForTie() {
+        // check for a tie
+        boolean tie = true;
+        for (int[] row1 : board) {
+            for (int column = 0; column < board[0].length; column++) {
+                if (row1[column] == 0) {
+                    tie = false;
+                    break;
+                }
+            }
+        }
+        return tie;
     }
 
     public GameScreen(Dimension size) {
@@ -233,9 +233,9 @@ public class GameScreen extends JPanel implements ActionListener {
         incr = size.width / randomNumberThatWorks; // distance between holes
 
         // add the back button
-//        JButton backBtn = ScreenManager.createButton("QUIT");
-//        backBtn.addActionListener(e -> ScreenManager.showScreen(Screen.TITLE_SCREEN));
+        //        JButton backBtn = ScreenManager.createButton("QUIT");
+        //        backBtn.addActionListener(e -> ScreenManager.showScreen(Screen.TITLE_SCREEN));
 
-//        this.add(backBtn);
+        //        this.add(backBtn);
     }
 }
