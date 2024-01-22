@@ -85,7 +85,7 @@ public class GameScreen extends JPanel implements ActionListener {
         g2d.drawImage(buffImg, null, 0, 0);
 
         // Draw the player's turn
-        g2d.setColor(currentPlayer == 1 ? Color.RED : Color.GREEN);
+        g2d.setColor(currentPlayer == 1 ? Color.RED : Color.decode("#009B24"));
         g2d.setFont(AssetManager.getFont("PressStart2P-Regular.ttf").deriveFont(18f));
         if (numPlayers == 1)
             g2d.drawString((currentPlayer == 1 ? "Your" : "Computer's") + " turn", 10, 30);
