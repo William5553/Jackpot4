@@ -22,6 +22,7 @@ public class GameScreen extends JPanel implements ActionListener {
     private static int ovalSize; // size of holes
     private static int pieceDistance; // distance between holes
     private static final int fallSpeed = 80; // speed at which pieces fall
+    private static final int rotationSpeed = 10; // speed at which pieces rotate
     private static final int gridSizeRatio = 12;
 
     private int[][] board;
@@ -73,6 +74,8 @@ public class GameScreen extends JPanel implements ActionListener {
         if (addingPiece != null) {
             // DST_OVER puts the image over the board
             gbi.setComposite(AlphaComposite.getInstance(AlphaComposite.DST_OVER, 1.0f));
+            // rotation
+            gbi.rotate(Math.toRadians(addingPiece.rotation), startX + addingPiece.x + ovalSize / 2, startY + addingPiece.y + ovalSize / 2);
             gbi.drawImage(getPieceImage(addingPiece.player), startX + addingPiece.x, startY + addingPiece.y, ovalSize, ovalSize, null);
         }
 
@@ -113,6 +116,8 @@ public class GameScreen extends JPanel implements ActionListener {
         if (addingPiece == null) return; // if there is no piece being added, don't do anything
 
         addingPiece.y += fallSpeed; // move the piece down
+        addingPiece.rotation += rotationSpeed; // rotate the piece
+
         int row = (addingPiece.y - offset / 2) / pieceDistance + 1; // calculate the row the piece is in
         // if the piece is in the last row or there is a piece below it
         if (row >= board.length || board[row][addingPiece.column] != 0) {

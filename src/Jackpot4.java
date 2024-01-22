@@ -17,13 +17,13 @@ public class Jackpot4 {
         frame.setSize(screenSize);
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.setLocationRelativeTo(null);
-        frame.setIconImage(AssetManager.getImage("icon.png"));
+        frame.setIconImage(AssetManager.getImage("icon.png")); // set icon to chips
 
         ScreenManager screenManager = new ScreenManager(screenSize);
-        ArrayList<JPanel> screens = screenManager.createScreens();
+        ArrayList<JPanel> screens = screenManager.createScreens(); // create the title and game screen
 
         for (JPanel screen : screens) {
-            frame.add(screen);
+            frame.add(screen); // add the screens to the frame
         }
 
         frame.setVisible(true);
