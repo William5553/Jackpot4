@@ -47,17 +47,13 @@ public class GameScreen extends JPanel implements ActionListener {
         BufferedImage buffImg = new BufferedImage(screenSize.width, screenSize.height, BufferedImage.TYPE_INT_ARGB);
         Graphics2D gbi = buffImg.createGraphics();
 
-        // Calculate total board width and height
-        int totalBoardWidth = COLUMNS * incr;
-        int totalBoardHeight = ROWS * incr;
-
         // Calculate starting x and y coordinates for the board
-        int startX = (screenSize.width - totalBoardWidth) / 2;
-        int startY = (screenSize.height - totalBoardHeight) / 2;
+        int startX = (screenSize.width - COLUMNS * incr) / 2;
+        int startY = (screenSize.height - ROWS * incr) / 2;
 
         // Clear area
-        //        g2d.setColor(Color.WHITE);
-        //        g2d.fillRect(0, 0, w, h);
+        // g2d.setColor(Color.WHITE);
+        // g2d.fillRect(0, 0, w, h);
 
         gbi.setColor(Color.decode("#dcb639")); // colour of the board
         gbi.fillRect(0, 0, screenSize.width, screenSize.height);
@@ -75,7 +71,7 @@ public class GameScreen extends JPanel implements ActionListener {
             }
         }
 
-        // Draw adding piece if we have it
+        // Draw adding piece
         if (addingPiece != null) {
             gbi.setComposite(AlphaComposite.getInstance(AlphaComposite.DST_OVER, 1.0f));
             gbi.drawImage(getPieceImage(addingPiece.player), startX + addingPiece.x, startY + addingPiece.y, ovalSize, ovalSize, null);
@@ -108,9 +104,8 @@ public class GameScreen extends JPanel implements ActionListener {
         if (board[0][column] == 0) {
             addingPiece = new GamePiece(0, column, incr * column, -ovalSize / 3, player);
             pieceDropped.start();
-        } else {
+        } else
             getToolkit().beep();
-        }
     }
 
     // gets called every time the timer ticks (every 50 milliseconds)
