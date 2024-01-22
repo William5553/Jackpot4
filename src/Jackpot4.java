@@ -5,7 +5,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
-public class Connect4 {
+public class Jackpot4 {
     public void run() {
         // play music
         AssetManager.playSound("music", true);
@@ -29,7 +29,7 @@ public class Connect4 {
     }
 
     public static void main(String[] args) {
-        Connect4 myPanel = new Connect4();
-        myPanel.run();
+        Jackpot4 game = new Jackpot4();
+        game.run();
     }
 }
