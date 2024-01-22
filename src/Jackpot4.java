@@ -17,6 +17,7 @@ public class Jackpot4 {
         frame.setSize(screenSize);
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.setLocationRelativeTo(null);
+        frame.setIconImage(AssetManager.getImage("icon.png"));
 
         ScreenManager screenManager = new ScreenManager(screenSize);
         ArrayList<JPanel> screens = screenManager.createScreens();

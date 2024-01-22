@@ -58,9 +58,11 @@ public class GameScreen extends JPanel implements ActionListener {
         for (int row = 0; row < board.length; row++) {
             for (int column = 0; column < board[0].length; column++) {
                 if (board[row][column] != 0) { // if there is a piece there
+                    // SRC_OVER puts the image under the board
                     gbi.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
                     gbi.drawImage(getPieceImage(board[row][column]), startX + pieceDistance * column, startY + pieceDistance * row, ovalSize, ovalSize, null);
                 } else { // no piece there
+                    // CLEAR removes alpha and colour from the image
                     gbi.setComposite(AlphaComposite.getInstance(AlphaComposite.CLEAR, 0.5f));
                     gbi.fillOval(startX + pieceDistance * column, startY + pieceDistance * row, ovalSize, ovalSize);
                 }
@@ -69,6 +71,7 @@ public class GameScreen extends JPanel implements ActionListener {
 
         // Draw adding piece
         if (addingPiece != null) {
+            // DST_OVER puts the image over the board
             gbi.setComposite(AlphaComposite.getInstance(AlphaComposite.DST_OVER, 1.0f));
             gbi.drawImage(getPieceImage(addingPiece.player), startX + addingPiece.x, startY + addingPiece.y, ovalSize, ovalSize, null);
         }
@@ -98,10 +101,11 @@ public class GameScreen extends JPanel implements ActionListener {
 
         // checks if the column is full
         if (board[0][column] == 0) {
+            // create a new piece, showing 1/3 of the piece
             addingPiece = new GamePiece(0, column, pieceDistance * column, -ovalSize / 3, player);
-            pieceDropped.start();
+            pieceDropped.start(); // starts the actionPerformed loop
         } else
-            getToolkit().beep();
+            getToolkit().beep(); // plays a beep sound
     }
 
     // gets called every time the timer ticks (every 50 milliseconds)
@@ -113,19 +117,19 @@ public class GameScreen extends JPanel implements ActionListener {
         // if the piece is in the last row or there is a piece below it
         if (row >= board.length || board[row][addingPiece.column] != 0) {
             // plays a random drop sound
-            AssetManager.playSound("drop" + rand.nextInt(1, 5), false);
+            AssetManager.playSound("drop" + rand.nextInt(1, 5), false); // play a random drop sound
             board[row - 1][addingPiece.column] = currentPlayer; // add the piece to the board
             addingPiece = null;
-            pieceDropped.stop();
+            pieceDropped.stop(); // stop the actionPerformed loop
 
             // check for wins
             int winner = checkForWin();
             if (winner != 0) {
-                if (numPlayers == 1)
+                if (numPlayers == 1) // singleplayer win
                     JOptionPane.showMessageDialog(this, (winner == 1 ? "You" : "The computer") + " won!");
-                else
+                else // multiplayer win
                     JOptionPane.showMessageDialog(this, "Player " + winner + " wins!");
-                restartGame(numPlayers);
+                restartGame(numPlayers); // restart the game, clear the board
             } else {
                 boolean tie = checkForTie();
                 if (tie) {
@@ -142,13 +146,13 @@ public class GameScreen extends JPanel implements ActionListener {
                         // if the column is full, keep generating random numbers until it's not
                         while (board[0][computerColumn] != 0)
                             computerColumn = rand.nextInt(COLUMNS);
-                        addPiece(computerColumn, currentPlayer);
+                        addPiece(computerColumn, currentPlayer); // add the computer's piece
                     }
 
                     // switch back to the human player after the computer's move is made
                     if (numPlayers == 1 && currentPlayer == 3)
                         currentPlayer = 1;
-                    else if (numPlayers > 1 && currentPlayer > numPlayers)
+                    else if (numPlayers > 1 && currentPlayer > numPlayers) // if it's multiplayer mode, and it's the last player's turn
                         currentPlayer = 1;
                 }
             }
@@ -195,7 +199,7 @@ public class GameScreen extends JPanel implements ActionListener {
     }
 
     private boolean checkForTie() {
-        // check for a tie
+        // check for a tie (all top of column are full)
         boolean tie = true;
         for (int[] row1 : board) {
             for (int column = 0; column < board[0].length; column++) {
@@ -216,7 +220,7 @@ public class GameScreen extends JPanel implements ActionListener {
         System.out.println("Initializing game screen");
         this.setSize(size);
         this.setVisible(false);
-        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS)); // make the buttons go vertically
 
         ovalSize = size.width / gridSizeRatio - offset * 2; // size of holes
         pieceDistance = size.width / gridSizeRatio; // distance between holes
