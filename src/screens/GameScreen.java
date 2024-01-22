@@ -29,6 +29,9 @@ public class GameScreen extends JPanel implements ActionListener {
     private final Timer pieceDropped;
     private final Random rand = new Random();
 
+    private static final Image redPieceImage = AssetManager.getImage("pieces/red.png");
+    private static final Image greenPieceImage = AssetManager.getImage("pieces/green.png");
+
     private int numPlayers;
     private int currentPlayer = 1;
 
@@ -62,27 +65,27 @@ public class GameScreen extends JPanel implements ActionListener {
         // Draw pieces or holes
         for (int row = 0; row < board.length; row++) {
             for (int column = 0; column < board[0].length; column++) {
-                if (board[row][column] != 0) {// if there is a piece there
-                    gbi.setColor(getPieceColor(board[row][column]));
+                if (board[row][column] != 0) { // if there is a piece there
                     gbi.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
-                } else // no piece there
+                    gbi.drawImage(getPieceImage(board[row][column]), startX + incr * column, startY + incr * row, ovalSize, ovalSize, null);
+                } else { // no piece there
                     gbi.setComposite(AlphaComposite.getInstance(AlphaComposite.CLEAR, 0.5f));
-                gbi.fillOval(startX + incr * column, startY + incr * row, ovalSize, ovalSize);
+                    gbi.fillOval(startX + incr * column, startY + incr * row, ovalSize, ovalSize);
+                }
             }
         }
 
         // Draw adding piece if we have it
         if (addingPiece != null) {
-            gbi.setColor(getPieceColor(addingPiece.player));
             gbi.setComposite(AlphaComposite.getInstance(AlphaComposite.DST_OVER, 1.0f));
-            gbi.fillOval(startX + addingPiece.x, startY + addingPiece.y, ovalSize, ovalSize);
+            gbi.drawImage(getPieceImage(addingPiece.player), startX + addingPiece.x, startY + addingPiece.y, ovalSize, ovalSize, null);
         }
 
         // Draws the buffered image.
         g2d.drawImage(buffImg, null, 0, 0);
 
         // Draw the player's turn
-        g2d.setColor(getPieceColor(currentPlayer));
+        g2d.setColor(currentPlayer == 1 ? Color.RED : Color.GREEN);
         g2d.setFont(AssetManager.getFont("PressStart2P-Regular.ttf").deriveFont(18f));
         if (numPlayers == 1)
             g2d.drawString((currentPlayer == 1 ? "Your" : "Computer's") + " turn", 10, 30);
@@ -211,8 +214,8 @@ public class GameScreen extends JPanel implements ActionListener {
         return tie;
     }
 
-    private Color getPieceColor(int player) {
-        return player == 1 ? Color.RED : Color.BLUE;
+    private Image getPieceImage(int player) {
+        return player == 1 ? redPieceImage : greenPieceImage;
     }
 
     public GameScreen(Dimension size) {
