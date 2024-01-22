@@ -51,10 +51,6 @@ public class GameScreen extends JPanel implements ActionListener {
         int startX = (screenSize.width - COLUMNS * pieceDistance) / 2;
         int startY = (screenSize.height - ROWS * pieceDistance) / 2;
 
-        // Clear area
-        // g2d.setColor(Color.WHITE);
-        // g2d.fillRect(0, 0, w, h);
-
         gbi.setColor(Color.decode("#dcb639")); // colour of the board
         gbi.fillRect(0, 0, screenSize.width, screenSize.height);
 
