@@ -20,7 +20,7 @@ public class GameScreen extends JPanel implements ActionListener {
 
     private static final int offset = 10;
     private static int ovalSize; // size of holes
-    private static int incr; // distance between holes
+    private static int pieceDistance; // distance between holes
     private static final int fallSpeed = 80; // speed at which pieces fall
     private static final int gridSizeRatio = 12;
 
@@ -48,8 +48,8 @@ public class GameScreen extends JPanel implements ActionListener {
         Graphics2D gbi = buffImg.createGraphics();
 
         // Calculate starting x and y coordinates for the board
-        int startX = (screenSize.width - COLUMNS * incr) / 2;
-        int startY = (screenSize.height - ROWS * incr) / 2;
+        int startX = (screenSize.width - COLUMNS * pieceDistance) / 2;
+        int startY = (screenSize.height - ROWS * pieceDistance) / 2;
 
         // Clear area
         // g2d.setColor(Color.WHITE);
@@ -63,10 +63,10 @@ public class GameScreen extends JPanel implements ActionListener {
             for (int column = 0; column < board[0].length; column++) {
                 if (board[row][column] != 0) { // if there is a piece there
                     gbi.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
-                    gbi.drawImage(getPieceImage(board[row][column]), startX + incr * column, startY + incr * row, ovalSize, ovalSize, null);
+                    gbi.drawImage(getPieceImage(board[row][column]), startX + pieceDistance * column, startY + pieceDistance * row, ovalSize, ovalSize, null);
                 } else { // no piece there
                     gbi.setComposite(AlphaComposite.getInstance(AlphaComposite.CLEAR, 0.5f));
-                    gbi.fillOval(startX + incr * column, startY + incr * row, ovalSize, ovalSize);
+                    gbi.fillOval(startX + pieceDistance * column, startY + pieceDistance * row, ovalSize, ovalSize);
                 }
             }
         }
@@ -102,7 +102,7 @@ public class GameScreen extends JPanel implements ActionListener {
 
         // checks if the column is full
         if (board[0][column] == 0) {
-            addingPiece = new GamePiece(0, column, incr * column, -ovalSize / 3, player);
+            addingPiece = new GamePiece(0, column, pieceDistance * column, -ovalSize / 3, player);
             pieceDropped.start();
         } else
             getToolkit().beep();
@@ -113,7 +113,7 @@ public class GameScreen extends JPanel implements ActionListener {
         if (addingPiece == null) return; // if there is no piece being added, don't do anything
 
         addingPiece.y += fallSpeed; // move the piece down
-        int row = (addingPiece.y - offset / 2) / incr + 1; // calculate the row the piece is in
+        int row = (addingPiece.y - offset / 2) / pieceDistance + 1; // calculate the row the piece is in
         // if the piece is in the last row or there is a piece below it
         if (row >= board.length || board[row][addingPiece.column] != 0) {
             // plays a random drop sound
@@ -220,18 +220,18 @@ public class GameScreen extends JPanel implements ActionListener {
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
         ovalSize = size.width / gridSizeRatio - offset * 2; // size of holes
-        incr = size.width / gridSizeRatio; // distance between holes
+        pieceDistance = size.width / gridSizeRatio; // distance between holes
 
         pieceDropped = new Timer(50, this); // timer that calls actionPerformed every 50 milliseconds
         addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
-                int totalBoardWidth = COLUMNS * incr;
+                int totalBoardWidth = COLUMNS * pieceDistance;
 
                 // Calculate starting x coordinate for the board
                 int startX = (getSize().width - totalBoardWidth) / 2;
 
                 // Calculate the column based on the new starting x coordinate
-                int column = (e.getPoint().x - startX) / incr;
+                int column = (e.getPoint().x - startX) / pieceDistance;
                 addPiece(column, currentPlayer);
             }
         });
