@@ -125,7 +125,10 @@ public class GameScreen extends JPanel implements ActionListener {
             // check for wins
             int winner = checkForWin();
             if (winner != 0) {
-                JOptionPane.showMessageDialog(this, "Player " + winner + " wins!");
+                if (numPlayers == 1)
+                    JOptionPane.showMessageDialog(this, (winner == 1 ? "You" : "The computer") + " won!");
+                else
+                    JOptionPane.showMessageDialog(this, "Player " + winner + " wins!");
                 restartGame(numPlayers);
             } else {
                 boolean tie = checkForTie();
