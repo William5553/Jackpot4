@@ -97,6 +97,8 @@ public class GameScreen extends JPanel implements ActionListener {
         board = new GamePiece[ROWS][COLUMNS]; // reset the board
         this.numPlayers = numPlayers; // set the number of players
         currentPlayer = 1;
+        addingPiece = null;
+        pieceDropped.stop();
         this.repaint();
     }
 
