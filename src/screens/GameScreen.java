@@ -22,10 +22,10 @@ public class GameScreen extends JPanel implements ActionListener {
     private static int ovalSize; // size of holes
     private static int pieceDistance; // distance between holes
     private static final int fallSpeed = 80; // speed at which pieces fall
-    private static final int rotationSpeed = 10; // speed at which pieces rotate
+    private static final int rotationSpeed = 8; // speed at which pieces rotate
     private static final int gridSizeRatio = 12;
 
-    private int[][] board;
+    private GamePiece[][] board;
     private GamePiece addingPiece;
     private final Timer pieceDropped;
     private final Random rand = new Random();
@@ -58,10 +58,12 @@ public class GameScreen extends JPanel implements ActionListener {
         // Draw pieces or holes
         for (int row = 0; row < board.length; row++) {
             for (int column = 0; column < board[0].length; column++) {
-                if (board[row][column] != 0) { // if there is a piece there
+                if (board[row][column] != null) { // if there is a piece there
                     // SRC_OVER puts the image under the board
                     gbi.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
-                    gbi.drawImage(getPieceImage(board[row][column]), startX + pieceDistance * column, startY + pieceDistance * row, ovalSize, ovalSize, null);
+                    gbi.rotate(Math.toRadians(board[row][column].rotation), startX + pieceDistance * column + ovalSize / 2, startY + pieceDistance * row + ovalSize / 2);
+                    gbi.drawImage(getPieceImage(board[row][column].player), startX + pieceDistance * column, startY + pieceDistance * row, ovalSize, ovalSize, null);
+                    gbi.rotate(Math.toRadians(-board[row][column].rotation), startX + pieceDistance * column + ovalSize / 2, startY + pieceDistance * row + ovalSize / 2);
                 } else { // no piece there
                     // CLEAR removes alpha and colour from the image
                     gbi.setComposite(AlphaComposite.getInstance(AlphaComposite.CLEAR, 0.5f));
@@ -92,7 +94,7 @@ public class GameScreen extends JPanel implements ActionListener {
     }
 
     public void restartGame(int numPlayers) {
-        board = new int[ROWS][COLUMNS]; // reset the board
+        board = new GamePiece[ROWS][COLUMNS]; // reset the board
         this.numPlayers = numPlayers; // set the number of players
         currentPlayer = 1;
         this.repaint();
@@ -103,7 +105,7 @@ public class GameScreen extends JPanel implements ActionListener {
         if (column < 0 || column >= board[0].length) return; // if the column is out of bounds
 
         // checks if the column is full
-        if (board[0][column] == 0) {
+        if (board[0][column] == null) {
             // create a new piece, showing 1/3 of the piece
             addingPiece = new GamePiece(0, column, pieceDistance * column, -ovalSize / 3, player);
             pieceDropped.start(); // starts the actionPerformed loop
@@ -120,10 +122,10 @@ public class GameScreen extends JPanel implements ActionListener {
 
         int row = (addingPiece.y - offset / 2) / pieceDistance + 1; // calculate the row the piece is in
         // if the piece is in the last row or there is a piece below it
-        if (row >= board.length || board[row][addingPiece.column] != 0) {
+        if (row >= board.length || board[row][addingPiece.column] != null) {
             // plays a random drop sound
             AssetManager.playSound("drop" + rand.nextInt(1, 5), false); // play a random drop sound
-            board[row - 1][addingPiece.column] = currentPlayer; // add the piece to the board
+            board[row - 1][addingPiece.column] = addingPiece; // add the piece to the board
             addingPiece = null;
             pieceDropped.stop(); // stop the actionPerformed loop
 
@@ -149,7 +151,7 @@ public class GameScreen extends JPanel implements ActionListener {
                     if (numPlayers == 1 && currentPlayer == 2 && addingPiece == null) {
                         int computerColumn = rand.nextInt(COLUMNS);
                         // if the column is full, keep generating random numbers until it's not
-                        while (board[0][computerColumn] != 0)
+                        while (board[0][computerColumn] != null)
                             computerColumn = rand.nextInt(COLUMNS);
                         addPiece(computerColumn, currentPlayer); // add the computer's piece
                     }
@@ -167,10 +169,10 @@ public class GameScreen extends JPanel implements ActionListener {
 
     private int checkForWin() {
         // check for horizontal wins
-        for (int row = 0; row < board.length; row++) {
+        for (GamePiece[] gamePieces : board) {
             for (int column = 0; column < board[0].length - 3; column++) {
-                if (board[row][column] != 0 && board[row][column] == board[row][column + 1] && board[row][column] == board[row][column + 2] && board[row][column] == board[row][column + 3]) {
-                    return board[row][column];
+                if (gamePieces[column] != null && gamePieces[column + 1] != null && gamePieces[column + 2] != null && gamePieces[column + 3] != null && gamePieces[column].player == gamePieces[column + 1].player && gamePieces[column].player == gamePieces[column + 2].player && gamePieces[column].player == gamePieces[column + 3].player) {
+                    return gamePieces[column].player;
                 }
             }
         }
@@ -178,8 +180,8 @@ public class GameScreen extends JPanel implements ActionListener {
         // check for vertical wins
         for (int row = 0; row < board.length - 3; row++) {
             for (int column = 0; column < board[0].length; column++) {
-                if (board[row][column] != 0 && board[row][column] == board[row + 1][column] && board[row][column] == board[row + 2][column] && board[row][column] == board[row + 3][column]) {
-                    return board[row][column];
+                if (board[row][column] != null && board[row + 1][column] != null && board[row + 2][column] != null && board[row + 3][column] != null && board[row][column].player == board[row + 1][column].player && board[row][column].player == board[row + 2][column].player && board[row][column].player == board[row + 3][column].player) {
+                    return board[row][column].player;
                 }
             }
         }
@@ -187,15 +189,15 @@ public class GameScreen extends JPanel implements ActionListener {
         // check for diagonal wins
         for (int row = 0; row < board.length - 3; row++) {
             for (int column = 0; column < board[0].length - 3; column++) {
-                if (board[row][column] != 0 && board[row][column] == board[row + 1][column + 1] && board[row][column] == board[row + 2][column + 2] && board[row][column] == board[row + 3][column + 3]) {
-                    return board[row][column];
+                if (board[row][column] != null && board[row + 1][column + 1] != null && board[row + 2][column + 2] != null && board[row + 3][column + 3] != null && board[row][column].player == board[row + 1][column + 1].player && board[row][column].player == board[row + 2][column + 2].player && board[row][column].player == board[row + 3][column + 3].player) {
+                    return board[row][column].player;
                 }
             }
         }
         for (int row = 0; row < board.length - 3; row++) {
             for (int column = 3; column < board[0].length; column++) {
-                if (board[row][column] != 0 && board[row][column] == board[row + 1][column - 1] && board[row][column] == board[row + 2][column - 2] && board[row][column] == board[row + 3][column - 3]) {
-                    return board[row][column];
+                if (board[row][column] != null && board[row + 1][column - 1] != null && board[row + 2][column - 2] != null && board[row + 3][column - 3] != null && board[row][column].player == board[row + 1][column - 1].player && board[row][column].player == board[row + 2][column - 2].player && board[row][column].player == board[row + 3][column - 3].player) {
+                    return board[row][column].player;
                 }
             }
         }
@@ -206,9 +208,9 @@ public class GameScreen extends JPanel implements ActionListener {
     private boolean checkForTie() {
         // check for a tie (all top of column are full)
         boolean tie = true;
-        for (int[] row1 : board) {
+        for (GamePiece[] row1 : board) {
             for (int column = 0; column < board[0].length; column++) {
-                if (row1[column] == 0) {
+                if (row1[column] == null) {
                     tie = false;
                     break;
                 }
