@@ -43,7 +43,7 @@ public class GameScreen extends JPanel implements ActionListener {
         Graphics2D g2d = (Graphics2D) g;
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-        Dimension screenSize = getSize();
+        Dimension screenSize = this.getSize();
 
         BufferedImage buffImg = new BufferedImage(screenSize.width, screenSize.height, BufferedImage.TYPE_INT_ARGB);
         Graphics2D gbi = buffImg.createGraphics();
@@ -61,8 +61,11 @@ public class GameScreen extends JPanel implements ActionListener {
                 if (board[row][column] != null) { // if there is a piece there
                     // SRC_OVER puts the image under the board
                     gbi.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
+                    // piece rotation
                     gbi.rotate(Math.toRadians(board[row][column].rotation), startX + pieceDistance * column + ovalSize / 2, startY + pieceDistance * row + ovalSize / 2);
+                    // draw the piece
                     gbi.drawImage(getPieceImage(board[row][column].player), startX + pieceDistance * column, startY + pieceDistance * row, ovalSize, ovalSize, null);
+                    // reset rotation
                     gbi.rotate(Math.toRadians(-board[row][column].rotation), startX + pieceDistance * column + ovalSize / 2, startY + pieceDistance * row + ovalSize / 2);
                 } else { // no piece there
                     // CLEAR removes alpha and colour from the image
@@ -112,7 +115,7 @@ public class GameScreen extends JPanel implements ActionListener {
             addingPiece = new GamePiece(0, column, pieceDistance * column, -ovalSize / 3, player);
             pieceDropped.start(); // starts the actionPerformed loop
         } else
-            getToolkit().beep(); // plays a beep sound
+            getToolkit().beep(); // plays a beep/error sound
     }
 
     // gets called every time the timer ticks (every 50 milliseconds)
